@@ -1,0 +1,2722 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>卡淘球星卡实时盯盘分析大屏</title>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', 'Segoe UI', sans-serif; background: #f0f2f5; min-height: 100vh; }
+
+        /* ===== 整体布局：左侧菜单 + 右侧主内容 ===== */
+        .app-layout { display: flex; min-height: 100vh; }
+        .sidebar {
+            width: 220px;
+            background: linear-gradient(180deg, #0d1223 0%, #1a2340 50%, #1e2d5a 100%);
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            top: 0; left: 0; bottom: 0;
+            z-index: 100;
+            box-shadow: 2px 0 12px rgba(0,0,0,0.15);
+        }
+        .sidebar-logo {
+            padding: 22px 20px 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+        .sidebar-logo-icon { font-size: 24px; }
+        .sidebar-logo-text { font-size: 15px; font-weight: 700; letter-spacing: 0.5px; line-height: 1.3; }
+        .sidebar-nav { padding: 16px 12px; flex: 1; }
+        .sidebar-nav-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 11px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            color: rgba(255,255,255,0.7);
+            transition: all 0.2s;
+            margin-bottom: 4px;
+            font-weight: 500;
+        }
+        .sidebar-nav-item:hover { background: rgba(255,255,255,0.08); color: #fff; }
+        .sidebar-nav-item.active {
+            background: linear-gradient(135deg, rgba(64,128,224,0.35), rgba(96,96,224,0.25));
+            color: #fff;
+            box-shadow: 0 2px 8px rgba(64,128,224,0.25);
+        }
+        .sidebar-nav-icon { font-size: 17px; width: 20px; text-align: center; }
+        .sidebar-footer {
+            padding: 14px 18px;
+            border-top: 1px solid rgba(255,255,255,0.08);
+            font-size: 11px;
+            color: rgba(255,255,255,0.4);
+        }
+        .main-content {
+            flex: 1;
+            margin-left: 220px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .page-view { display: none; flex: 1; }
+        .page-view.active { display: flex; flex-direction: column; }
+
+        /* ===== 顶部工具栏（首页用） ===== */
+        .toolbar-bar {
+            background: #fff;
+            padding: 14px 28px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+            flex-wrap: wrap;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .toolbar-left { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+        .toolbar-right { display: flex; align-items: center; gap: 10px; }
+        .toolbar-search-input {
+            padding: 8px 16px;
+            border: 1px solid #e0e0e0;
+            border-radius: 20px;
+            width: 280px;
+            font-size: 13px;
+            outline: none;
+            background: #f5f6f8;
+            color: #333;
+            transition: all 0.2s;
+        }
+        .toolbar-search-input:focus { border-color: #4080e0; background: #fff; box-shadow: 0 0 0 3px rgba(64,128,224,0.1); }
+        .toolbar-btn-primary {
+            padding: 8px 22px;
+            background: linear-gradient(135deg, #4080e0, #6060e0);
+            color: #fff;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 13px;
+            transition: all 0.3s;
+            box-shadow: 0 2px 8px rgba(64,128,224,0.3);
+        }
+        .toolbar-btn-primary:hover { transform: translateY(-1px); box-shadow: 0 4px 14px rgba(64,128,224,0.45); }
+        .toolbar-btn-primary:disabled { background: #e0e0e0; cursor: not-allowed; box-shadow: none; transform: none; }
+        .toolbar-btn-ghost {
+            padding: 8px 18px;
+            background: #fff;
+            color: #595959;
+            border: 1px solid #e0e0e0;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 13px;
+            transition: all 0.2s;
+        }
+        .toolbar-btn-ghost:hover { border-color: #4080e0; color: #4080e0; }
+
+        /* ===== 深色渐变顶栏（保留兼容旧样式） ===== */
+        .header-bar {
+            background: linear-gradient(135deg, #0d1223 0%, #1a2340 40%, #1e2d5a 70%, #2a3a6e 100%);
+            padding: 0 32px;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 16px rgba(13, 18, 35, 0.3);
+        }
+        .header-title {
+            color: #fff;
+            font-size: 20px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .header-title .icon { font-size: 22px; }
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .search-input {
+            padding: 8px 16px;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 20px;
+            width: 260px;
+            font-size: 13px;
+            outline: none;
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            transition: all 0.3s;
+        }
+        .search-input::placeholder { color: rgba(255,255,255,0.5); }
+        .search-input:focus { border-color: rgba(100,160,255,0.6); background: rgba(255,255,255,0.15); box-shadow: 0 0 0 3px rgba(64,128,224,0.15); }
+        
+        .search-btn {
+            padding: 8px 22px;
+            background: linear-gradient(135deg, #4080e0, #6060e0);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 13px;
+            transition: all 0.3s;
+            box-shadow: 0 2px 8px rgba(64,128,224,0.3);
+        }
+        .search-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 14px rgba(64,128,224,0.45); }
+        .search-btn:disabled { background: rgba(255,255,255,0.15); cursor: not-allowed; box-shadow: none; transform: none; color: rgba(255,255,255,0.4); }
+        
+        .upload-btn {
+            padding: 8px 18px;
+            background: rgba(255,255,255,0.1);
+            color: rgba(255,255,255,0.85);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 13px;
+            transition: all 0.3s;
+        }
+        .upload-btn:hover { background: rgba(255,255,255,0.18); border-color: rgba(255,255,255,0.35); }
+        
+        .header-divider { width: 1px; height: 24px; background: rgba(255,255,255,0.15); }
+
+        .monitor-btn {
+            padding: 8px 18px;
+            background: rgba(255,255,255,0.1);
+            color: rgba(255,255,255,0.85);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 13px;
+            transition: all 0.3s;
+        }
+        .monitor-btn:hover { background: rgba(255,255,255,0.18); border-color: rgba(255,255,255,0.35); }
+        .monitor-btn.active { background: linear-gradient(135deg, #4080e0, #6060e0); border-color: transparent; }
+
+        /* ===== 自动监控页面 ===== */
+        .monitor-page {
+            padding: 24px 32px 40px;
+            background: #f0f2f5;
+            min-height: calc(100vh - 60px);
+        }
+        .monitor-page-header {
+            margin-bottom: 20px;
+        }
+        .monitor-page-title { font-size: 22px; font-weight: 700; color: #1a1a2e; }
+        .monitor-page-subtitle { font-size: 13px; color: #8c8c8c; margin-top: 4px; }
+        .monitor-layout {
+            display: grid;
+            grid-template-columns: 380px 1fr;
+            gap: 20px;
+            align-items: start;
+        }
+        @media (max-width: 1100px) {
+            .monitor-layout { grid-template-columns: 1fr; }
+        }
+        .monitor-config-panel {
+            background: #fff;
+            border-radius: 14px;
+            padding: 24px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+            border: 1px solid #f0f0f0;
+            position: sticky;
+            top: 24px;
+        }
+        .monitor-config-panel h3 {
+            font-size: 16px; font-weight: 700; color: #1a1a2e; margin-bottom: 4px;
+        }
+        .monitor-config-panel .panel-desc {
+            font-size: 12.5px; color: #8c8c8c; margin-bottom: 22px;
+        }
+        .monitor-section { margin-bottom: 22px; padding-bottom: 22px; border-bottom: 1px solid #f5f5f5; }
+        .monitor-section:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+        .monitor-section-title {
+            font-size: 13px; font-weight: 600; color: #595959;
+            margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px;
+            display: flex; align-items: center; gap: 6px;
+        }
+        .monitor-status-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; }
+        .monitor-status-label { font-size: 13px; color: #8c8c8c; }
+        .monitor-status-value { font-size: 13px; font-weight: 600; color: #1a1a2e; }
+        .monitor-keywords-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 10px; }
+        .monitor-keyword-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 9px 12px;
+            background: #f5f6f8;
+            border-radius: 8px;
+            border: 1px solid #e8e8e8;
+            transition: all 0.2s;
+        }
+        .monitor-keyword-item:hover { border-color: #4080e0; background: #fff; }
+        .monitor-keyword-item input { flex: 1; border: none; background: transparent; font-size: 13px; outline: none; color: #333; }
+        .monitor-keyword-remove { background: none; border: none; color: #c0c0c0; cursor: pointer; font-size: 16px; padding: 2px 6px; border-radius: 4px; }
+        .monitor-keyword-remove:hover { color: #f5222d; background: #fff1f0; }
+        .monitor-add-keyword {
+            width: 100%;
+            padding: 9px;
+            border: 1px dashed #d0d0d0;
+            border-radius: 8px;
+            background: transparent;
+            color: #8c8c8c;
+            cursor: pointer;
+            font-size: 13px;
+            transition: all 0.2s;
+        }
+        .monitor-add-keyword:hover { border-color: #4080e0; color: #4080e0; background: #f0f5ff; }
+        .monitor-time-input {
+            padding: 9px 12px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+            background: #f5f6f8;
+            color: #333;
+            transition: all 0.2s;
+            width: 100%;
+        }
+        .monitor-time-input:focus { border-color: #4080e0; background: #fff; box-shadow: 0 0 0 3px rgba(64,128,224,0.1); }
+        .monitor-toggle {
+            position: relative;
+            width: 44px; height: 24px;
+            background: #d0d0d0;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: background 0.3s;
+            flex-shrink: 0;
+        }
+        .monitor-toggle.on { background: linear-gradient(135deg, #4080e0, #6060e0); }
+        .monitor-toggle::after {
+            content: '';
+            position: absolute;
+            top: 3px; left: 3px;
+            width: 18px; height: 18px;
+            background: #fff;
+            border-radius: 50%;
+            transition: transform 0.3s;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }
+        .monitor-toggle.on::after { transform: translateX(20px); }
+        .monitor-save-btn {
+            width: 100%;
+            padding: 11px;
+            background: linear-gradient(135deg, #4080e0, #6060e0);
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .monitor-save-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 14px rgba(64,128,224,0.35); }
+        .monitor-run-btn {
+            width: 100%;
+            padding: 11px;
+            background: linear-gradient(135deg, #36cfc9, #209b73);
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 8px;
+        }
+        .monitor-run-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 14px rgba(32,155,115,0.35); }
+        .monitor-run-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+        /* 运行历史主区域 */
+        .monitor-history-panel {
+            background: #fff;
+            border-radius: 14px;
+            padding: 24px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+            border: 1px solid #f0f0f0;
+            min-height: 500px;
+        }
+        .monitor-history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #f0f0f0;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .monitor-history-header-left { display: flex; flex-direction: column; gap: 2px; }
+        .monitor-history-header h3 { font-size: 16px; font-weight: 700; color: #1a1a2e; }
+        .monitor-history-stats { font-size: 12.5px; color: #8c8c8c; }
+        .monitor-history-toolbar {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .monitor-history-toolbar .tb-info { font-size: 12px; color: #8c8c8c; }
+        .monitor-history-list { display: flex; flex-direction: column; gap: 10px; max-height: none; }
+        .monitor-history-item {
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            gap: 12px;
+            align-items: center;
+            padding: 14px 16px;
+            background: #fff;
+            border-radius: 10px;
+            border: 1px solid #f0f0f0;
+            border-left: 4px solid #4080e0;
+            font-size: 13px;
+            transition: all 0.2s;
+        }
+        .monitor-history-item:hover { border-color: #d0d8e8; box-shadow: 0 2px 8px rgba(0,0,0,0.04); transform: translateY(-1px); }
+        .monitor-history-item.fail { border-left-color: #f5222d; }
+        .monitor-history-item[onclick]:hover { background: #f8faff; border-color: #4080e0; cursor: pointer; }
+        .monitor-history-item .h-cb { width: 16px; height: 16px; cursor: pointer; accent-color: #4080e0; }
+        .monitor-history-item .h-main { display: flex; flex-direction: column; gap: 4px; cursor: pointer; }
+        .monitor-history-item .h-kw { font-weight: 600; color: #1a1a2e; font-size: 14px; }
+        .monitor-history-item .h-time { color: #8c8c8c; font-size: 11.5px; }
+        .monitor-history-item .h-side { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+        .monitor-history-item .h-result { font-size: 12px; font-weight: 600; }
+        .monitor-history-item .h-result.success { color: #209b73; }
+        .monitor-history-item .h-result.fail { color: #f5222d; }
+        .monitor-history-item .h-view {
+            font-size: 11px; color: #4080e0; cursor: pointer;
+        }
+        .monitor-empty {
+            text-align: center; color: #bfbfbf; padding: 60px 20px; font-size: 14px;
+        }
+        .monitor-empty-icon { font-size: 48px; margin-bottom: 12px; opacity: 0.5; }
+        /* 保留关闭按钮通用样式（供弹窗复用） */
+        .monitor-close { background: none; border: none; color: rgba(255,255,255,0.6); font-size: 24px; cursor: pointer; padding: 0 4px; }
+        .monitor-close:hover { color: #fff; }
+
+        /* ===== 凑套管理页面 ===== */
+        .collection-page {
+            padding: 24px 32px 40px;
+            background: #f0f2f5;
+            min-height: calc(100vh - 60px);
+        }
+        .collection-page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .collection-page-title { font-size: 22px; font-weight: 700; color: #1a1a2e; }
+        .collection-page-subtitle { font-size: 13px; color: #8c8c8c; margin-top: 4px; }
+        .collection-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 18px;
+        }
+        .collection-card {
+            background: #fff;
+            border-radius: 14px;
+            padding: 22px;
+            cursor: pointer;
+            transition: all 0.25s;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+            border: 1px solid #f0f0f0;
+            position: relative;
+            overflow: hidden;
+        }
+        .collection-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #4080e0, #6060e0);
+        }
+        .collection-card:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,0.1); border-color: #d0d8e8; }
+        .collection-card-name {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1a1a2e;
+            margin-bottom: 4px;
+            padding-right: 60px;
+            word-break: break-all;
+        }
+        .collection-card-count { font-size: 12.5px; color: #8c8c8c; margin-bottom: 14px; }
+        .collection-card-progress-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 6px;
+        }
+        .collection-card-progress-text { font-size: 14px; font-weight: 700; color: #1a1a2e; }
+        .collection-card-progress-percent { font-size: 14px; font-weight: 700; color: #4080e0; }
+        .collection-card-progress-bar {
+            height: 6px;
+            background: #f0f0f0;
+            border-radius: 3px;
+            overflow: hidden;
+            margin-bottom: 14px;
+        }
+        .collection-card-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4080e0, #6060e0);
+            border-radius: 3px;
+            transition: width 0.4s;
+        }
+        .collection-card-stats {
+            display: flex;
+            gap: 16px;
+            font-size: 12px;
+            color: #8c8c8c;
+        }
+        .collection-card-stats span strong { color: #1a1a2e; font-weight: 600; }
+        .collection-card-badge {
+            position: absolute;
+            top: 16px; right: 16px;
+            padding: 3px 10px;
+            border-radius: 10px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+        .collection-card-badge.done { background: #f6ffed; color: #209b73; border: 1px solid #b7eb8f; }
+        .collection-card-badge.partial { background: #fff7e6; color: #d48806; border: 1px solid #ffd591; }
+        .collection-card-badge.zero { background: #fff1f0; color: #f5222d; border: 1px solid #ffa39e; }
+        .collection-card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 16px;
+            padding-top: 14px;
+            border-top: 1px solid #f5f5f5;
+        }
+        .collection-scrape-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 7px 14px;
+            background: linear-gradient(135deg, #4080e0, #6060e0);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 12.5px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 2px 6px rgba(64,128,224,0.25);
+        }
+        .collection-scrape-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(64,128,224,0.4); }
+        .collection-scrape-btn:disabled { background: #d9d9d9; cursor: not-allowed; transform: none; box-shadow: none; }
+        .collection-scrape-btn.scraping { background: linear-gradient(135deg, #faad14, #fa8c16); animation: scrapePulse 1.2s ease-in-out infinite; }
+        @keyframes scrapePulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
+        .collection-card-last-scrape { font-size: 11px; color: #bfbfbf; }
+        .collection-empty-state {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 80px 20px;
+            color: #bfbfbf;
+            font-size: 14px;
+        }
+        .collection-empty-state-icon { font-size: 48px; margin-bottom: 12px; opacity: 0.5; }
+
+        /* ===== 凑套详情弹出框 ===== */
+        .collection-modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 200;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(3px);
+        }
+        .collection-modal.open { display: flex; }
+        .collection-modal-content {
+            width: 1000px;
+            max-width: 94vw;
+            height: 86vh;
+            max-height: 780px;
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 24px 70px rgba(0,0,0,0.3);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            animation: collectionModalIn 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        @keyframes collectionModalIn {
+            from { transform: translateY(24px) scale(0.95); opacity: 0; }
+            to { transform: translateY(0) scale(1); opacity: 1; }
+        }
+        .collection-modal-header {
+            padding: 18px 28px;
+            background: linear-gradient(135deg, #0d1223, #1e2d5a);
+            color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+        }
+        .collection-modal-header h2 { font-size: 18px; font-weight: 600; }
+        .collection-modal-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 22px 28px 24px;
+            background: #fff;
+        }
+        .collection-textarea {
+            width: 100%;
+            min-height: 140px;
+            padding: 10px 12px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 12.5px;
+            line-height: 1.6;
+            resize: vertical;
+            outline: none;
+            font-family: inherit;
+            background: #fff;
+            transition: all 0.2s;
+        }
+        .collection-textarea:focus { border-color: #4080e0; box-shadow: 0 0 0 3px rgba(64,128,224,0.1); }
+        .collection-detail-empty { text-align: center; color: #bfbfbf; padding: 80px 0; font-size: 14px; }
+        .collection-detail-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 14px;
+            margin-bottom: 16px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .collection-detail-title { font-size: 17px; font-weight: 700; color: #1a1a2e; }
+        .collection-detail-stats { font-size: 13px; color: #8c8c8c; margin-top: 4px; }
+        /* ===== 添加系列对话框 ===== */
+        .collection-add-modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 210;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(3px);
+        }
+        .collection-add-modal.open { display: flex; }
+        .collection-add-modal-content {
+            width: 520px;
+            max-width: 92vw;
+            background: #fff;
+            border-radius: 14px;
+            box-shadow: 0 24px 60px rgba(0,0,0,0.25);
+            overflow: hidden;
+            animation: collectionModalIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .collection-add-modal-header {
+            padding: 16px 22px;
+            background: linear-gradient(135deg, #0d1223, #1e2d5a);
+            color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .collection-add-modal-header h3 { font-size: 16px; font-weight: 600; }
+        .collection-add-modal-body { padding: 22px; }
+        .collection-toolbar {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            padding: 10px 14px;
+            background: #f5f6f8;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+        }
+        .collection-toolbar-btn {
+            padding: 5px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid #e0e0e0;
+            background: #fff;
+            color: #595959;
+            font-weight: 500;
+        }
+        .collection-toolbar-btn:hover { border-color: #4080e0; color: #4080e0; }
+        .collection-toolbar-btn.success { border-color: #b7eb8f; background: #f6ffed; color: #209b73; }
+        .collection-toolbar-btn.success:hover { background: #e6f7e6; }
+        .collection-toolbar-btn.danger { border-color: #ffccc7; background: #fff1f0; color: #f5222d; }
+        .collection-toolbar-btn.danger:hover { background: #ffe7e5; }
+        .collection-toolbar-info { margin-left: auto; font-size: 12px; color: #8c8c8c; }
+        .collection-card-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 14px;
+            border-radius: 8px;
+            margin-bottom: 6px;
+            background: #fff;
+            border: 1px solid #f0f0f0;
+            transition: all 0.2s;
+        }
+        .collection-card-row:hover { border-color: #d0d8e8; box-shadow: 0 1px 4px rgba(0,0,0,0.04); }
+        .collection-card-row.collected { background: linear-gradient(90deg, #f6ffed 0%, #fff 100%); border-color: #d9f7be; }
+        .collection-card-code { font-size: 12.5px; font-weight: 700; color: #4080e0; min-width: 72px; font-family: 'SF Mono', Consolas, monospace; }
+        .collection-card-player { font-size: 13px; color: #1a1a2e; flex: 1; font-weight: 500; }
+        .collection-card-en { color: #bfbfbf; font-size: 11.5px; margin-left: 6px; font-weight: 400; }
+        .collection-card-team { font-size: 12px; color: #8c8c8c; }
+        .collection-card-status { font-size: 11.5px; font-weight: 600; padding: 3px 10px; border-radius: 10px; }
+        .collection-card-status.yes { background: #f6ffed; color: #209b73; border: 1px solid #b7eb8f; }
+        .collection-card-status.no { background: #fafafa; color: #bfbfbf; border: 1px solid #f0f0f0; }
+        .collection-delete-btn { background: none; border: none; color: #bfbfbf; cursor: pointer; font-size: 16px; padding: 4px 8px; border-radius: 4px; transition: all 0.2s; }
+        .collection-delete-btn:hover { color: #f5222d; background: #fff1f0; }
+
+        /* ===== 主体区域 ===== */
+        .home-page {
+            background: #f0f2f5;
+            flex: 1;
+        }
+        .container { max-width: 1440px; margin: 0 auto; padding: 24px 32px 40px; }
+
+        /* ===== KPI 卡片 ===== */
+        .kpi-row { display: flex; gap: 18px; margin-bottom: 22px; }
+        .kpi-card {
+            flex: 1;
+            background: #fff;
+            border-radius: 14px;
+            padding: 22px 24px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            transition: all 0.3s;
+            border: 1px solid #f0f0f0;
+        }
+        .kpi-card:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,0.08); border-color: #d0d8e8; }
+        .kpi-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #4080e0, #6060e0);
+        }
+        .kpi-card:nth-child(2)::before { background: linear-gradient(90deg, #36cfc9, #209b73); }
+        .kpi-card:nth-child(3)::before { background: linear-gradient(90deg, #ffc53d, #fa8c16); }
+        .kpi-card:nth-child(4)::before { background: linear-gradient(90deg, #ff7875, #f5222d); }
+        .kpi-title { color: #8c8c8c; font-size: 13px; font-weight: 500; margin-bottom: 8px; }
+        .kpi-value { font-size: 30px; font-weight: 700; color: #1a1a2e; letter-spacing: -0.5px; }
+        .kpi-card:nth-child(1) .kpi-value { color: #4080e0; }
+        .kpi-card:nth-child(2) .kpi-value { color: #209b73; }
+        .kpi-card:nth-child(3) .kpi-value { color: #d48806; }
+        .kpi-card:nth-child(4) .kpi-value { color: #f5222d; }
+
+        /* ===== 图表卡片 ===== */
+        .chart-row { display: flex; gap: 18px; margin-bottom: 22px; }
+        .chart-card {
+            background: #fff;
+            border-radius: 14px;
+            padding: 24px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            transition: all 0.3s;
+            border: 1px solid #f0f0f0;
+        }
+        .chart-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.08); border-color: #d0d8e8; }
+        .w-100 { width: 100%; box-sizing: border-box; }
+        .w-50 { width: calc(50% - 9px); box-sizing: border-box; }
+        .chart-container { width: 100%; height: 400px; }
+
+        /* ===== 数据表格 ===== */
+        .table-card {
+            background: #fff;
+            border-radius: 14px;
+            padding: 24px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            margin-bottom: 40px;
+            border: 1px solid #f0f0f0;
+        }
+        /* 凑套匹配标签 */
+        .match-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-left: 6px;
+            vertical-align: middle;
+            line-height: 1.6;
+            white-space: nowrap;
+        }
+        .match-badge.uncollected {
+            background: #fff7e6;
+            color: #d48806;
+            border: 1px solid #ffd591;
+        }
+        .match-badge.collected {
+            background: #f6ffed;
+            color: #209b73;
+            border: 1px solid #b7eb8f;
+        }
+        .match-badge .match-series { font-weight: 500; opacity: 0.85; }
+        tr.has-uncollected-match { background: #fffbe6 !important; }
+        tr.has-uncollected-match:hover { background: #fff7e6 !important; }
+        /* 凑套匹配汇总面板 */
+        .match-summary-bar {
+            display: none;
+            margin-bottom: 16px;
+            padding: 14px 18px;
+            background: linear-gradient(135deg, #fffbe6, #fff7e6);
+            border: 1px solid #ffe58f;
+            border-radius: 10px;
+            font-size: 13px;
+        }
+        .match-summary-bar.show { display: block; }
+        .match-summary-title {
+            font-weight: 700;
+            color: #d48806;
+            margin-bottom: 8px;
+            font-size: 13.5px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .match-summary-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .match-summary-item {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 10px;
+            background: #fff;
+            border: 1px solid #ffd591;
+            border-radius: 6px;
+            font-size: 12px;
+            color: #595959;
+        }
+        .match-summary-item strong { color: #1a1a2e; }
+        .match-summary-item .ms-price { color: #f5222d; font-weight: 600; }
+        .match-filter-btn {
+            margin-left: 6px;
+            padding: 2px 8px;
+            border: 1px solid #ffd591;
+            border-radius: 4px;
+            background: #fff;
+            color: #d48806;
+            font-size: 11px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .match-filter-btn:hover { background: #d48806; color: #fff; }
+        .match-filter-btn.active { background: #d48806; color: #fff; }
+        .table-header-flex {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 16px;
+            margin-bottom: 16px;
+            border-bottom: 1px solid #f0f0f0;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .table-header-flex h3 { margin: 0; color: #1a1a2e; font-size: 16px; font-weight: 600; }
+        
+        .filter-group { display: flex; align-items: center; gap: 10px; }
+        .filter-label { font-size: 13px; color: #8c8c8c; }
+        .filter-select, .filter-input {
+            padding: 6px 12px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 13px;
+            outline: none;
+            background-color: #fafafa;
+            transition: all 0.2s;
+            color: #333;
+        }
+        .filter-select:hover, .filter-input:focus { border-color: #4080e0; background: #fff; box-shadow: 0 0 0 3px rgba(64,128,224,0.1); }
+
+        .btn-success {
+            background: linear-gradient(135deg, #36cfc9, #209b73);
+            color: white;
+            border: none;
+            padding: 7px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 13px;
+            margin-left: 12px;
+            transition: all 0.3s;
+            box-shadow: 0 2px 6px rgba(32,155,115,0.25);
+        }
+        .btn-success:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(32,155,115,0.35); }
+
+        .table-container { max-height: 600px; overflow-y: auto; border-radius: 8px; }
+        .table-container::-webkit-scrollbar { width: 6px; }
+        .table-container::-webkit-scrollbar-track { background: #f5f5f5; border-radius: 3px; }
+        .table-container::-webkit-scrollbar-thumb { background: #d0d0d0; border-radius: 3px; }
+        .table-container::-webkit-scrollbar-thumb:hover { background: #b0b0b0; }
+
+        table { width: 100%; border-collapse: collapse; text-align: left; }
+        th, td { padding: 12px 12px; border-bottom: 1px solid #f5f5f5; font-size: 13px; }
+        th {
+            background: linear-gradient(180deg, #fafbfd 0%, #f5f6f8 100%);
+            color: #8c8c8c;
+            font-weight: 600;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        .sortable { cursor: pointer; user-select: none; transition: all 0.2s; }
+        .sortable:hover { background: #eef1f6; color: #4080e0; }
+        .sort-icon { display: inline-block; margin-left: 3px; font-size: 11px; color: #c0c4cc; }
+        .sort-active { color: #4080e0; font-weight: bold; }
+        tbody tr { transition: background 0.15s; }
+        tbody tr:hover { background: #f8faff; }
+        
+        .price-text { color: #f5222d; font-weight: 700; }
+        
+        .tag-bid {
+            background: linear-gradient(135deg, #f6ffed, #e6fffb);
+            color: #209b73;
+            border: 1px solid #b7eb8f;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .tag-unbid { color: #bfbfbf; font-size: 12px; }
+        
+        .card-link { color: #4080e0; text-decoration: none; font-weight: 500; transition: color 0.2s; }
+        .card-link:hover { color: #6060e0; text-decoration: underline; }
+
+        /* ===== 拖拽覆盖层 ===== */
+        body.drag-over { background-color: #e8f5e9; }
+        body.drag-over::after {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            border: 3px dashed #36cfc9;
+            z-index: 9997;
+            pointer-events: none;
+        }
+        .drag-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9998; background: rgba(255,255,255,0.85); backdrop-filter: blur(4px); pointer-events: none; justify-content: center; align-items: center; }
+        body.drag-over .drag-overlay { display: flex; }
+        .drag-overlay h1 { color: #209b73; font-size: 36px; pointer-events: none; }
+
+        /* ===== 加载遮罩 ===== */
+        #loadingOverlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255,255,255,0.85);
+            backdrop-filter: blur(6px);
+            z-index: 999;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        .spinner {
+            width: 44px; height: 44px;
+            border: 3px solid #e8e8e8;
+            border-top: 3px solid #4080e0;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-bottom: 16px;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        #loadingText { color: #595959; font-size: 15px; font-weight: 500; text-align: center; line-height: 1.6; }
+
+        /* ===== 响应式 ===== */
+        @media (max-width: 900px) {
+            .header-bar { padding: 0 16px; height: auto; min-height: 64px; flex-wrap: wrap; gap: 12px; padding-top: 12px; padding-bottom: 12px; }
+            .container { padding: 16px; }
+            .kpi-row { flex-wrap: wrap; }
+            .kpi-card { min-width: calc(50% - 10px); }
+            .chart-row { flex-direction: column; }
+            .w-50 { width: 100%; }
+        }
+
+        /* ===== 主题变量（浅色默认） ===== */
+        :root {
+            --bg-page: #f0f2f5;
+            --bg-card: #fff;
+            --bg-elevated: #f5f6f8;
+            --text-primary: #1a1a2e;
+            --text-secondary: #595959;
+            --text-tertiary: #8c8c8c;
+            --border-color: #f0f0f0;
+            --shadow-color: rgba(0,0,0,0.05);
+            --accent-gradient: linear-gradient(135deg, #4080e0, #6060e0);
+            --input-bg: #f5f6f8;
+            --input-border: #e0e0e0;
+            --row-hover: #f8faff;
+            --th-bg-start: #fafbfd;
+            --th-bg-end: #f5f6f8;
+        }
+        [data-theme="dark"] {
+            --bg-page: #0d1117;
+            --bg-card: #161b22;
+            --bg-elevated: #1c2128;
+            --text-primary: #e6edf3;
+            --text-secondary: #adbac7;
+            --text-tertiary: #768390;
+            --border-color: #30363d;
+            --shadow-color: rgba(0,0,0,0.3);
+            --accent-gradient: linear-gradient(135deg, #4080e0, #6060e0);
+            --input-bg: #1c2128;
+            --input-border: #30363d;
+            --row-hover: #1c2128;
+            --th-bg-start: #161b22;
+            --th-bg-end: #1c2128;
+        }
+
+        /* 暗色模式覆盖：body 背景 */
+        body { background: var(--bg-page); }
+
+        /* 暗色模式覆盖：卡片/面板/弹窗 */
+        [data-theme="dark"] .toolbar-bar,
+        [data-theme="dark"] .monitor-config-panel,
+        [data-theme="dark"] .monitor-history-panel,
+        [data-theme="dark"] .monitor-history-item,
+        [data-theme="dark"] .monitor-keyword-item,
+        [data-theme="dark"] .monitor-time-input,
+        [data-theme="dark"] .toolbar-search-input,
+        [data-theme="dark"] .collection-card,
+        [data-theme="dark"] .collection-modal-content,
+        [data-theme="dark"] .collection-add-modal-content,
+        [data-theme="dark"] .table-card,
+        [data-theme="dark"] .match-summary-bar,
+        [data-theme="dark"] .filter-input,
+        [data-theme="dark"] .filter-select,
+        [data-theme="dark"] .kpi-card,
+        [data-theme="dark"] .chart-card {
+            background: var(--bg-card);
+            color: var(--text-primary);
+            border-color: var(--border-color);
+            box-shadow: 0 1px 4px var(--shadow-color);
+        }
+        [data-theme="dark"] .monitor-page,
+        [data-theme="dark"] .collection-page,
+        [data-theme="dark"] .home-page {
+            background: var(--bg-page);
+        }
+        [data-theme="dark"] .toolbar-bar,
+        [data-theme="dark"] .monitor-history-header,
+        [data-theme="dark"] .collection-detail-header,
+        [data-theme="dark"] .table-header-flex {
+            border-bottom-color: var(--border-color);
+        }
+        [data-theme="dark"] .toolbar-search-input,
+        [data-theme="dark"] .monitor-time-input,
+        [data-theme="dark"] .filter-input,
+        [data-theme="dark"] .filter-select {
+            background: var(--input-bg);
+            border-color: var(--input-border);
+            color: var(--text-primary);
+        }
+        [data-theme="dark"] .toolbar-search-input:focus,
+        [data-theme="dark"] .monitor-time-input:focus,
+        [data-theme="dark"] .filter-input:focus,
+        [data-theme="dark"] .filter-select:focus {
+            background: var(--bg-card);
+            border-color: #4080e0;
+        }
+        [data-theme="dark"] .monitor-keyword-item {
+            background: var(--input-bg);
+            border-color: var(--input-border);
+        }
+        [data-theme="dark"] .monitor-keyword-item input {
+            color: var(--text-primary);
+        }
+        [data-theme="dark"] .monitor-history-item {
+            background: var(--bg-card);
+            border-color: var(--border-color);
+        }
+        [data-theme="dark"] .monitor-history-item .h-kw,
+        [data-theme="dark"] .collection-card-name,
+        [data-theme="dark"] .collection-card-progress-text,
+        [data-theme="dark"] .collection-detail-title,
+        [data-theme="dark"] .kpi-value,
+        [data-theme="dark"] .table-header-flex h3,
+        [data-theme="dark"] .monitor-page-title,
+        [data-theme="dark"] .collection-page-title,
+        [data-theme="dark"] .monitor-config-panel h3,
+        [data-theme="dark"] .monitor-history-header h3 {
+            color: var(--text-primary);
+        }
+        [data-theme="dark"] .monitor-page-subtitle,
+        [data-theme="dark"] .collection-page-subtitle,
+        [data-theme="dark"] .collection-card-count,
+        [data-theme="dark"] .collection-detail-stats,
+        [data-theme="dark"] .monitor-status-label,
+        [data-theme="dark"] .monitor-history-stats,
+        [data-theme="dark"] .kpi-title,
+        [data-theme="dark"] .filter-label,
+        [data-theme="dark"] .collection-card-team,
+        [data-theme="dark"] .collection-card-stats,
+        [data-theme="dark"] .collection-card-last-scrape,
+        [data-theme="dark"] .monitor-status-value {
+            color: var(--text-tertiary);
+        }
+        [data-theme="dark"] .collection-card-player,
+        [data-theme="dark"] .monitor-section-title,
+        [data-theme="dark"] .toolbar-btn-ghost {
+            color: var(--text-secondary);
+        }
+        [data-theme="dark"] .collection-card-row {
+            background: var(--bg-card);
+            border-color: var(--border-color);
+        }
+        [data-theme="dark"] .collection-card-row.collected {
+            background: linear-gradient(90deg, rgba(32,155,115,0.12) 0%, var(--bg-card) 100%);
+            border-color: rgba(32,155,115,0.4);
+        }
+        [data-theme="dark"] .collection-toolbar {
+            background: var(--input-bg);
+        }
+        [data-theme="dark"] .collection-toolbar-btn {
+            background: var(--bg-card);
+            border-color: var(--input-border);
+            color: var(--text-secondary);
+        }
+        [data-theme="dark"] .collection-textarea {
+            background: var(--input-bg);
+            border-color: var(--input-border);
+            color: var(--text-primary);
+        }
+        [data-theme="dark"] th {
+            background: linear-gradient(180deg, var(--th-bg-start) 0%, var(--th-bg-end) 100%);
+            color: var(--text-tertiary);
+            border-bottom-color: var(--border-color);
+        }
+        [data-theme="dark"] td,
+        [data-theme="dark"] th {
+            border-bottom-color: var(--border-color);
+        }
+        [data-theme="dark"] tbody tr:hover {
+            background: var(--row-hover);
+        }
+        [data-theme="dark"] .sortable:hover {
+            background: var(--bg-elevated);
+        }
+        [data-theme="dark"] .monitor-section {
+            border-bottom-color: var(--border-color);
+        }
+        [data-theme="dark"] .match-summary-bar {
+            background: linear-gradient(135deg, rgba(212,136,6,0.12), rgba(212,136,6,0.06));
+            border-color: rgba(212,136,6,0.4);
+        }
+        [data-theme="dark"] .match-summary-item {
+            background: var(--bg-card);
+            border-color: rgba(212,136,6,0.4);
+            color: var(--text-secondary);
+        }
+        [data-theme="dark"] .match-summary-item strong,
+        [data-theme="dark"] .collection-card-stats span strong {
+            color: var(--text-primary);
+        }
+        [data-theme="dark"] .collection-card-progress-bar {
+            background: var(--bg-elevated);
+        }
+        [data-theme="dark"] .table-container::-webkit-scrollbar-track {
+            background: var(--bg-elevated);
+        }
+        [data-theme="dark"] .table-container::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+        }
+        [data-theme="dark"] .collection-modal-body {
+            background: var(--bg-card);
+        }
+        [data-theme="dark"] .collection-add-modal-body {
+            background: var(--bg-card);
+        }
+        [data-theme="dark"] .collection-card-status.no {
+            background: var(--bg-elevated);
+            color: var(--text-tertiary);
+            border-color: var(--border-color);
+        }
+        [data-theme="dark"] .collection-delete-btn {
+            color: var(--text-tertiary);
+        }
+
+        /* ===== 卡片缩略图 ===== */
+        .card-thumb {
+            width: 36px;
+            height: 50px;
+            border-radius: 4px;
+            background: var(--bg-elevated);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            flex-shrink: 0;
+            overflow: hidden;
+        }
+        .card-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+
+        /* ===== Toast 提示 ===== */
+        #toastContainer {
+            position: fixed;
+            top: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            align-items: center;
+            pointer-events: none;
+        }
+        .toast {
+            padding: 12px 22px;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 14px;
+            font-weight: 500;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+            background: linear-gradient(135deg, #4080e0, #6060e0);
+            animation: toastIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            max-width: 480px;
+            text-align: center;
+            pointer-events: auto;
+        }
+        .toast.success { background: linear-gradient(135deg, #36cfc9, #209b73); }
+        .toast.info { background: linear-gradient(135deg, #4080e0, #6060e0); }
+        .toast.warning { background: linear-gradient(135deg, #ffc53d, #fa8c16); }
+        .toast.fading { animation: toastOut 0.3s forwards; }
+        @keyframes toastIn {
+            from { transform: translateY(-20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        @keyframes toastOut {
+            from { transform: translateY(0); opacity: 1; }
+            to { transform: translateY(-20px); opacity: 0; }
+        }
+
+        /* ===== 数据清理弹窗 ===== */
+        .cleanup-modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 220;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(3px);
+        }
+        .cleanup-modal.open { display: flex; }
+        .cleanup-modal-content {
+            width: 560px;
+            max-width: 92vw;
+            max-height: 86vh;
+            background: var(--bg-card);
+            border-radius: 14px;
+            box-shadow: 0 24px 70px rgba(0,0,0,0.3);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            animation: collectionModalIn 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .cleanup-modal-header {
+            padding: 16px 22px;
+            background: linear-gradient(135deg, #0d1223, #1e2d5a);
+            color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+        }
+        .cleanup-modal-header h3 { font-size: 16px; font-weight: 600; }
+        .cleanup-modal-body {
+            padding: 22px;
+            overflow-y: auto;
+            background: var(--bg-card);
+        }
+        .cleanup-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 14px 16px;
+            background: var(--bg-elevated);
+            border-radius: 10px;
+            margin-bottom: 10px;
+            border: 1px solid var(--border-color);
+        }
+        .cleanup-item input[type="checkbox"] {
+            margin-top: 3px;
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+            accent-color: #4080e0;
+            flex-shrink: 0;
+        }
+        .cleanup-item-content { flex: 1; }
+        .cleanup-item-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+        .cleanup-item-desc {
+            font-size: 12.5px;
+            color: var(--text-tertiary);
+        }
+        .cleanup-footer {
+            display: flex;
+            gap: 8px;
+            justify-content: flex-end;
+            margin-top: 18px;
+            padding-top: 16px;
+            border-top: 1px solid var(--border-color);
+        }
+        .cleanup-loading {
+            text-align: center;
+            padding: 40px 0;
+            color: var(--text-tertiary);
+            font-size: 14px;
+        }
+
+        /* ===== 侧边栏底部按钮区 ===== */
+        .sidebar-actions {
+            display: flex;
+            gap: 6px;
+            padding: 10px 14px;
+        }
+        .sidebar-action-btn {
+            flex: 1;
+            padding: 8px 10px;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 8px;
+            color: rgba(255,255,255,0.8);
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+        }
+        .sidebar-action-btn:hover {
+            background: rgba(255,255,255,0.15);
+            color: #fff;
+            border-color: rgba(255,255,255,0.25);
+        }
+    </style>
+</head>
+<body>
+
+<div class="drag-overlay"><h1>松开鼠标，立即解析 CSV</h1></div>
+
+<div id="loadingOverlay">
+    <div class="spinner"></div>
+    <div id="loadingText">正在处理数据...<br>请耐心等待</div>
+</div>
+
+<div class="app-layout">
+    <!-- 左侧菜单 -->
+    <aside class="sidebar">
+        <div class="sidebar-logo">
+            <span class="sidebar-logo-icon">📊</span>
+            <span class="sidebar-logo-text">卡淘盯盘<br>分析大屏</span>
+        </div>
+        <nav class="sidebar-nav">
+            <div class="sidebar-nav-item active" data-page="home" onclick="switchPage('home')">
+                <span class="sidebar-nav-icon">🏠</span>
+                <span>首页</span>
+            </div>
+            <div class="sidebar-nav-item" data-page="monitor" onclick="switchPage('monitor')">
+                <span class="sidebar-nav-icon">⏰</span>
+                <span>自动监控</span>
+            </div>
+            <div class="sidebar-nav-item" data-page="collection" onclick="switchPage('collection')">
+                <span class="sidebar-nav-icon">🃏</span>
+                <span>凑套管理</span>
+            </div>
+        </nav>
+        <div class="sidebar-actions">
+            <button class="sidebar-action-btn" id="themeToggleBtn" onclick="toggleTheme()" title="切换主题">🌙</button>
+            <button class="sidebar-action-btn" onclick="openCleanupModal()" title="数据清理">🧹</button>
+        </div>
+        <div class="sidebar-footer">v1.0 · 仅本地使用</div>
+    </aside>
+
+    <!-- 右侧主内容区 -->
+    <main class="main-content">
+        <!-- ===== 首页 ===== -->
+        <div class="page-view active home-page" id="page-home">
+            <div class="toolbar-bar">
+                <div class="toolbar-left">
+                    <input type="text" id="keywordInput" class="toolbar-search-input" placeholder="输入球星/卡种 (例如: 欧文 Prizm)">
+                    <button id="searchBtn" class="toolbar-btn-primary">实时抓取</button>
+                </div>
+                <div class="toolbar-right">
+                    <input type="file" id="csvFileInput" accept=".csv" style="display: none;">
+                    <button class="toolbar-btn-ghost" onclick="document.getElementById('csvFileInput').click()">导入 CSV</button>
+                </div>
+            </div>
+            <div class="container">
+                <div class="kpi-row">
+                    <div class="kpi-card"><div class="kpi-title">有效在售/成交总数</div><div class="kpi-value" id="kpi-count">0 张</div></div>
+                    <div class="kpi-card"><div class="kpi-title">市场平均价格</div><div class="kpi-value" id="kpi-avg">￥0.00</div></div>
+                    <div class="kpi-card"><div class="kpi-title">参与卖家总数</div><div class="kpi-value" id="kpi-sellers">0 人</div></div>
+                    <div class="kpi-card"><div class="kpi-title">当前最高标价</div><div class="kpi-value" id="kpi-max">￥0.00</div></div>
+                </div>
+                <div class="chart-row">
+                    <div class="chart-card w-100"><div id="scatterChart" class="chart-container" style="height: 450px;"></div></div>
+                </div>
+                <div class="chart-row">
+                    <div class="chart-card w-50"><div id="sellerChart" class="chart-container"></div></div>
+                    <div class="chart-card w-50"><div id="pricePieChart" class="chart-container"></div></div>
+                </div>
+                <div class="table-card" id="detailTableSection" style="display: none;">
+                <!-- 凑套匹配汇总 -->
+                <div class="match-summary-bar" id="matchSummaryBar">
+                    <div class="match-summary-title">
+                        <span>🎯 凑套匹配结果</span>
+                        <span style="font-weight:400; color:#8c8c8c; font-size:12px;">抓取数据中匹配到以下未搜集卡片</span>
+                        <button class="match-filter-btn" id="matchFilterBtn" onclick="toggleUncollectedFilter()">仅看匹配</button>
+                    </div>
+                    <div class="match-summary-list" id="matchSummaryList"></div>
+                </div>
+                    <div class="table-header-flex">
+                        <h3>抓取数据明细 <span style="font-weight:400; color:#8c8c8c; font-size:13px;">(时间自动根据系统校准)</span></h3>
+                        <div class="filter-group">
+                            <span class="filter-label">标题包含</span>
+                            <input type="text" id="titleFilter" class="filter-input" placeholder="银折, 评级, 10编..." style="width: 150px;">
+                            <span class="filter-label" style="margin-left:8px;">卖家筛选</span>
+                            <select id="sellerFilter" class="filter-select"><option value="ALL">全部卖家</option></select>
+                            <button id="markBidBtn" class="btn-success">标记所选为"已出价"</button>
+                        </div>
+                    </div>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th style="width: 5%;"><input type="checkbox" id="selectAllCheckbox"></th>
+                                    <th style="width: 5%;">序号</th>
+                                    <th style="width: 32%;">卡片标题</th>
+                                    <th style="width: 13%;" class="sortable" onclick="handleSort('Seller_Name')">卖家名称 <span id="sort-icon-Seller_Name" class="sort-icon">↕</span></th>
+                                    <th style="width: 15%;" class="sortable" onclick="handleSort('Price_CNY')">当前价格 <span id="sort-icon-Price_CNY" class="sort-icon sort-active">↑</span></th>
+                                    <th style="width: 15%;" class="sortable" onclick="handleSort('End_Time')">截标时间 (实时) <span id="sort-icon-End_Time" class="sort-icon">↕</span></th>
+                                    <th style="width: 15%;" class="sortable" onclick="handleSort('Is_Bid')">状态 <span id="sort-icon-Is_Bid" class="sort-icon">↕</span></th>
+                                </tr>
+                            </thead>
+                            <tbody id="dataTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== 自动监控页 ===== -->
+        <div class="page-view" id="page-monitor">
+            <div class="monitor-page">
+                <div class="monitor-page-header">
+                    <div class="monitor-page-title">自动监控</div>
+                    <div class="monitor-page-subtitle">配置监控关键字和定时任务，系统会在指定时间自动抓取卡淘数据</div>
+                </div>
+                <div class="monitor-layout">
+                    <!-- 左侧：配置面板 -->
+                    <div class="monitor-config-panel">
+                        <h3>监控配置</h3>
+                        <div class="panel-desc">设置定时任务与监控关键字</div>
+                        <!-- 监控开关 -->
+                        <div class="monitor-section">
+                            <div class="monitor-section-title">运行状态</div>
+                            <div class="monitor-status-row">
+                                <span class="monitor-status-label">监控开关</span>
+                                <div style="display:flex; align-items:center; gap:10px;">
+                                    <span id="monitorStatusText" style="font-size:13px; color:#8c8c8c;">已关闭</span>
+                                    <div class="monitor-toggle" id="monitorToggle" onclick="toggleMonitorEnabled()"></div>
+                                </div>
+                            </div>
+                            <div class="monitor-status-row">
+                                <span class="monitor-status-label">上次运行</span>
+                                <span class="monitor-status-value" id="monitorLastRun">-</span>
+                            </div>
+                        </div>
+                        <!-- 定时设置 -->
+                        <div class="monitor-section">
+                            <div class="monitor-section-title">每天抓取时间</div>
+                            <input type="time" id="monitorTimeInput" class="monitor-time-input" value="09:00">
+                        </div>
+                        <!-- 监控关键字 -->
+                        <div class="monitor-section">
+                            <div class="monitor-section-title">监控关键字</div>
+                            <div class="monitor-keywords-list" id="monitorKeywordsList"></div>
+                            <button class="monitor-add-keyword" onclick="addMonitorKeywordInput('')">+ 添加关键字</button>
+                        </div>
+                        <!-- 操作按钮 -->
+                        <div class="monitor-section">
+                            <button class="monitor-save-btn" onclick="saveMonitorConfig()">保存配置</button>
+                            <button class="monitor-run-btn" id="monitorRunBtn" onclick="runMonitorNow()">立即执行一次抓取</button>
+                        </div>
+                    </div>
+                    <!-- 右侧：运行历史 -->
+                    <div class="monitor-history-panel">
+                        <div class="monitor-history-header">
+                            <div class="monitor-history-header-left">
+                                <h3>运行历史</h3>
+                                <span class="monitor-history-stats" id="monitorHistoryStats">暂无记录</span>
+                            </div>
+                            <div class="monitor-history-toolbar">
+                                <span class="tb-info" id="monitorHistorySelectedInfo">未选择记录</span>
+                                <button class="collection-toolbar-btn" onclick="selectAllMonitorHistory(true)">全选</button>
+                                <button class="collection-toolbar-btn" onclick="selectAllMonitorHistory(false)">取消全选</button>
+                                <button class="collection-toolbar-btn danger" onclick="deleteMonitorHistoryBatch()">删除所选</button>
+                            </div>
+                        </div>
+                        <div class="monitor-history-list" id="monitorHistoryList">
+                            <div class="monitor-empty">
+                                <div class="monitor-empty-icon">📋</div>
+                                <div>暂无运行记录</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== 凑套管理页 ===== -->
+        <div class="page-view" id="page-collection">
+            <div class="collection-page">
+                <div class="collection-page-header">
+                    <div>
+                        <div class="collection-page-title">凑套系列管理</div>
+                        <div class="collection-page-subtitle">管理你的凑套系列，追踪搜集进度</div>
+                    </div>
+                    <button class="toolbar-btn-primary" onclick="openAddCollectionModal()">+ 添加系列</button>
+                </div>
+                <div class="collection-grid" id="collectionGrid">
+                    <div class="collection-empty-state">
+                        <div class="collection-empty-state-icon">🃏</div>
+                        <div>暂无凑套系列，点击右上角"+ 添加系列"创建第一个</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<!-- 数据清理弹窗 -->
+<div class="cleanup-modal" id="cleanupModal">
+    <div class="cleanup-modal-content">
+        <div class="cleanup-modal-header">
+            <h3>🧹 数据清理</h3>
+            <button class="monitor-close" onclick="closeCleanupModal()" style="color:rgba(255,255,255,0.6);">&times;</button>
+        </div>
+        <div class="cleanup-modal-body" id="cleanupModalBody">
+            <div class="cleanup-loading">正在加载清理项...</div>
+        </div>
+    </div>
+</div>
+
+<!-- Toast 容器 -->
+<div id="toastContainer"></div>
+
+<!-- 添加系列对话框 -->
+<div class="collection-add-modal" id="collectionAddModal">
+    <div class="collection-add-modal-content">
+        <div class="collection-add-modal-header">
+            <h3>添加凑套系列</h3>
+            <button class="monitor-close" onclick="closeAddCollectionModal()">&times;</button>
+        </div>
+        <div class="collection-add-modal-body">
+            <textarea id="collectionInput" class="collection-textarea" placeholder="粘贴凑套信息，格式如下：&#10;topps狂热&#10; - FAN-2 扬尼斯·阿德托昆博 (Giannis Antetokounmpo) - 密尔沃基雄鹿&#10; - FAN-13 保罗·班切罗 (Paolo Banchero) - 奥兰多魔术"></textarea>
+            <div style="display:flex; gap:8px; margin-top:14px;">
+                <button class="monitor-save-btn" style="flex:1;" onclick="createCollection()">解析并保存</button>
+                <button class="toolbar-btn-ghost" onclick="closeAddCollectionModal()">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 凑套详情弹出框 -->
+<div class="collection-modal" id="collectionModal">
+    <div class="collection-modal-content">
+        <div class="collection-modal-header">
+            <h2 id="collectionModalTitle">凑套详情</h2>
+            <button class="monitor-close" onclick="closeCollectionModal()">&times;</button>
+        </div>
+        <div class="collection-modal-body" id="collectionDetailPanel">
+            <div class="collection-detail-empty">请选择一个系列查看详情</div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const scatterChart = echarts.init(document.getElementById('scatterChart'));
+    const sellerChart = echarts.init(document.getElementById('sellerChart'));
+    const pricePieChart = echarts.init(document.getElementById('pricePieChart'));
+
+    let globalValidData = []; 
+    let currentKeyword = ""; 
+    let currentSortKey = 'Price_CNY'; 
+    let currentSortAsc = true;        
+
+    const body = document.body;
+    body.addEventListener('dragover', (e) => { e.preventDefault(); body.classList.add('drag-over'); });
+    body.addEventListener('dragleave', (e) => { e.preventDefault(); body.classList.remove('drag-over'); });
+    body.addEventListener('drop', (e) => {
+        e.preventDefault(); body.classList.remove('drag-over');
+        if(e.dataTransfer.files.length > 0) handleFileUpload(e.dataTransfer.files[0]);
+    });
+
+    document.getElementById('csvFileInput').addEventListener('change', (e) => {
+        if(e.target.files.length > 0) handleFileUpload(e.target.files[0]);
+        e.target.value = ''; 
+    });
+
+    function handleFileUpload(file) {
+        if (!file.name.endsWith('.csv')) { alert("请上传 CSV 格式的文件！"); return; }
+        document.getElementById('loadingText').innerHTML = "正在解析本地 CSV 文件并校准时间...";
+        document.getElementById('loadingOverlay').style.display = 'flex';
+
+        Papa.parse(file, {
+            header: true, dynamicTyping: true, skipEmptyLines: true,
+            complete: function(results) {
+                const data = results.data;
+                document.getElementById('loadingOverlay').style.display = 'none';
+                if(data.length === 0) { alert("文件中没有读取到数据！"); return; }
+                if(data[0].Keyword) { currentKeyword = data[0].Keyword; document.getElementById('keywordInput').value = currentKeyword; }
+                processAndRender(data);
+            },
+            error: function(err) { document.getElementById('loadingOverlay').style.display = 'none'; alert("解析出错: " + err); }
+        });
+    }
+
+    document.getElementById('searchBtn').addEventListener('click', async function() {
+        const keyword = document.getElementById('keywordInput').value.trim();
+        if (!keyword) { alert("请输入想要查询的关键字！"); return; }
+
+        currentKeyword = keyword;
+        document.getElementById('loadingText').innerHTML = "正在召唤浏览器进行后台抓取...<br>请耐心等待";
+        document.getElementById('loadingOverlay').style.display = 'flex';
+        this.disabled = true; document.getElementById('detailTableSection').style.display = 'none';
+
+        try {
+            const response = await fetch('/api/search', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ keyword: keyword }) });
+            if (!response.ok) throw new Error("服务器响应错误");
+            const result = await response.json();
+            const items = result.items || [];
+            const newCount = result.new_count || 0;
+            const totalCount = result.total_count || items.length;
+            if (items.length === 0) {
+                alert("未抓取到任何数据。");
+            } else {
+                await processAndRender(items);
+                // 增量抓取提示
+                if (newCount > 0) {
+                    showToast(`✨ 本次新增 ${newCount} 条，共 ${totalCount} 条数据`, 'success');
+                } else {
+                    showToast(`未新增数据，已展示全部 ${totalCount} 条历史数据`, 'info');
+                }
+            }
+        } catch (error) { alert("抓取失败: " + error.message); }
+        finally { document.getElementById('loadingOverlay').style.display = 'none'; this.disabled = false; }
+    });
+
+    function parseTimeToSeconds(timeStr) {
+        if (!timeStr || timeStr === '未知时间') return 99999999; 
+        let seconds = 0;
+        const daysMatch = timeStr.match(/(\d+)天/);
+        const hoursMatch = timeStr.match(/(\d+)小时/);
+        const minsMatch = timeStr.match(/(\d+)分/);
+        const secsMatch = timeStr.match(/(\d+)秒/);
+
+        if (daysMatch) seconds += parseInt(daysMatch[1]) * 86400;
+        if (hoursMatch) seconds += parseInt(hoursMatch[1]) * 3600;
+        if (minsMatch) seconds += parseInt(minsMatch[1]) * 60;
+        if (secsMatch) seconds += parseInt(secsMatch[1]);
+        
+        return seconds;
+    }
+
+    function formatSecondsToTime(totalSeconds) {
+        if (totalSeconds <= 0) return "已截标";
+        const days = Math.floor(totalSeconds / 86400); totalSeconds %= 86400;
+        const hours = Math.floor(totalSeconds / 3600); totalSeconds %= 3600;
+        const mins = Math.floor(totalSeconds / 60);
+        const secs = Math.floor(totalSeconds % 60);
+
+        let res = [];
+        if (days > 0) res.push(`${days}天`);
+        if (hours > 0) res.push(`${hours}小时`);
+        if (mins > 0) res.push(`${mins}分`);
+        if (secs > 0) res.push(`${secs}秒`);
+        return res.join(" ");
+    }
+
+    function getRealTimeData(item) {
+        let originalSec = parseTimeToSeconds(item.End_Time);
+        if (originalSec === 99999999) return { sec: originalSec, str: item.End_Time };
+        
+        if (item.Scrape_Time) {
+            const nowSec = Math.floor(Date.now() / 1000);
+            const elapsed = nowSec - item.Scrape_Time;
+            const currentSec = originalSec - elapsed;
+            return {
+                sec: currentSec,
+                str: currentSec > 0 ? formatSecondsToTime(currentSec) : "已截标"
+            };
+        }
+        return { sec: originalSec, str: item.End_Time };
+    }
+
+    // 凑套匹配相关状态
+    let matchUncollectedOnly = false;
+
+    async function processAndRender(data) {
+        globalValidData = data.filter(item => item.Price_CNY > 0);
+        if(globalValidData.length === 0) return;
+
+        // 调用后端匹配 API，把匹配信息合并到 globalValidData
+        try {
+            const resp = await fetch('/api/scrape/match', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ items: globalValidData })
+            });
+            const matchData = await resp.json();
+            if (matchData.items && matchData.items.length === globalValidData.length) {
+                // 把匹配信息写回 globalValidData
+                globalValidData.forEach((item, i) => {
+                    item.Matched_Collections = matchData.items[i].Matched_Collections || [];
+                    item.Has_Uncollected_Match = matchData.items[i].Has_Uncollected_Match || false;
+                });
+                renderMatchSummary(matchData.uncollected_summary || []);
+            }
+        } catch(e) { console.error('凑套匹配失败:', e); }
+
+        document.getElementById('titleFilter').value = '';
+        matchUncollectedOnly = false;
+        updateMatchFilterBtn();
+        renderChartsAndKPI(globalValidData);
+        initSellerFilter(globalValidData);
+        currentSortKey = 'Price_CNY'; currentSortAsc = true;
+        updateSortIcons(); applyFilterAndSort();
+        document.getElementById('detailTableSection').style.display = 'block';
+    }
+
+    function renderMatchSummary(summary) {
+        const bar = document.getElementById('matchSummaryBar');
+        const list = document.getElementById('matchSummaryList');
+        if (!summary || summary.length === 0) {
+            bar.classList.remove('show');
+            return;
+        }
+        bar.classList.add('show');
+        list.innerHTML = summary.map(s => {
+            const priceText = s.min_price > 0
+                ? `<span class="ms-price">最低 ￥${s.min_price.toFixed(0)}</span> · <span>均 ￥${s.avg_price}</span>`
+                : '<span style="color:#bfbfbf">无价格</span>';
+            return `<div class="match-summary-item">
+                <span><strong>${escapeHtml(s.code || '—')}</strong> ${escapeHtml(s.player_cn || '')}</span>
+                <span class="match-series">[${escapeHtml(s.series_name)}]</span>
+                <span style="color:#8c8c8c">×${s.match_count}</span>
+                ${priceText}
+            </div>`;
+        }).join('');
+    }
+
+    function toggleUncollectedFilter() {
+        matchUncollectedOnly = !matchUncollectedOnly;
+        updateMatchFilterBtn();
+        applyFilterAndSort();
+    }
+
+    function updateMatchFilterBtn() {
+        const btn = document.getElementById('matchFilterBtn');
+        if (btn) {
+            btn.classList.toggle('active', matchUncollectedOnly);
+            btn.textContent = matchUncollectedOnly ? '✓ 仅看匹配' : '仅看匹配';
+        }
+    }
+
+    function renderChartsAndKPI(dataToRender) {
+        const totalPrice = dataToRender.reduce((sum, item) => sum + item.Price_CNY, 0);
+        const avgPrice = (totalPrice / dataToRender.length).toFixed(2);
+        const tempSorted = [...dataToRender].sort((a, b) => a.Price_CNY - b.Price_CNY);
+        const maxPrice = tempSorted[tempSorted.length - 1].Price_CNY;
+        
+        const sellerMap = {}; dataToRender.forEach(item => { sellerMap[item.Seller_Name || "未知卖家"] = (sellerMap[item.Seller_Name || "未知卖家"] || 0) + 1; });
+        const sellerCount = Object.keys(sellerMap).length;
+        const topSellers = Object.entries(sellerMap).sort((a, b) => b[1] - a[1]).slice(0, 10);
+
+        const priceBins = { "100元以下":0, "100-500元":0, "500-1000元":0, "1000-3000元":0, "3000元以上":0 };
+        dataToRender.forEach(item => { const p = item.Price_CNY; if(p < 100) priceBins["100元以下"]++; else if(p < 500) priceBins["100-500元"]++; else if(p < 1000) priceBins["500-1000元"]++; else if(p < 3000) priceBins["1000-3000元"]++; else priceBins["3000元以上"]++; });
+
+        document.getElementById('kpi-count').innerText = `${dataToRender.length} 张`; document.getElementById('kpi-avg').innerText = `￥${avgPrice}`; document.getElementById('kpi-sellers').innerText = `${sellerCount} 人`; document.getElementById('kpi-max').innerText = `￥${maxPrice}`;
+
+        scatterChart.setOption({ 
+            title: { text: '市场全量价格分布', left: 'center', textStyle: { color: '#1a1a2e', fontSize: 15, fontWeight: 600 } }, 
+            tooltip: { trigger: 'item', backgroundColor: 'rgba(26,26,46,0.9)', borderColor: 'transparent', textStyle: { color: '#fff', fontSize: 12 }, formatter: p => `<b>${p.data[2]}</b><br/>价格: <b style="color:#ff7875">￥${p.data[1]}</b><br/><span style="font-size:11px;color:rgba(255,255,255,0.7)">${p.data[3]}</span>` }, 
+            xAxis: { type: 'value', show: false }, 
+            yAxis: { type: 'value', name: '价格 (元)', nameTextStyle: { color: '#8c8c8c' }, axisLine: { lineStyle: { color: '#e0e0e0' } }, splitLine: { lineStyle: { color: '#f5f5f5' } }, axisLabel: { color: '#8c8c8c' } }, 
+            series: [{ type: 'scatter', symbolSize: 10, itemStyle: { color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{offset: 0, color: '#6060e0'}, {offset: 1, color: '#4080e0'}]), opacity: 0.75 }, data: tempSorted.map((item, i) => [i, item.Price_CNY, item.Seller_Name, item.Card_Title]), markLine: { data: [{ type: 'average', name: '平均值', yAxis: avgPrice }], lineStyle: { color: '#f5222d', type: 'dashed' }, label: { color: '#f5222d' } } }] 
+        });
+
+        sellerChart.setOption({ 
+            title: { text: '出卡量 Top 10 卖家', left: 'center', textStyle: { color: '#1a1a2e', fontSize: 15, fontWeight: 600 } }, 
+            tooltip: { trigger: 'axis', backgroundColor: 'rgba(26,26,46,0.9)', borderColor: 'transparent', textStyle: { color: '#fff' } }, 
+            grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true }, 
+            xAxis: { type: 'category', data: topSellers.map(s => s[0]), axisLabel: { interval: 0, rotate: 30, color: '#8c8c8c' }, axisLine: { lineStyle: { color: '#e0e0e0' } } }, 
+            yAxis: { type: 'value', name: '出卡数量', nameTextStyle: { color: '#8c8c8c' }, axisLine: { lineStyle: { color: '#e0e0e0' } }, splitLine: { lineStyle: { color: '#f5f5f5' } }, axisLabel: { color: '#8c8c8c' } }, 
+            series: [{ data: topSellers.map(s => s[1]), type: 'bar', barWidth: '50%', itemStyle: { color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{offset: 0, color: '#36cfc9'}, {offset: 1, color: '#209b73'}]), borderRadius: [4, 4, 0, 0] } }] 
+        });
+
+        const pieData = Object.entries(priceBins).filter(b => b[1] > 0).map(b => ({ name: b[0], value: b[1] }));
+        pricePieChart.setOption({ 
+            title: { text: '价格区间占比', left: 'center', textStyle: { color: '#1a1a2e', fontSize: 15, fontWeight: 600 } }, 
+            tooltip: { trigger: 'item', backgroundColor: 'rgba(26,26,46,0.9)', borderColor: 'transparent', textStyle: { color: '#fff' }, formatter: '{b}: {c}张 ({d}%)' }, 
+            legend: { orient: 'vertical', left: 'left', textStyle: { color: '#595959' } }, 
+            series: [{ type: 'pie', radius: ['40%', '70%'], itemStyle: { borderRadius: 8, borderColor: '#fff', borderWidth: 2 }, label: { show: false, position: 'center' }, emphasis: { label: { show: true, fontSize: 18, fontWeight: 'bold', color: '#1a1a2e' } }, 
+            color: ['#4080e0', '#36cfc9', '#ffc53d', '#ff7875', '#b37feb'],
+            data: pieData }] 
+        });
+    }
+
+    function initSellerFilter(data) {
+        const select = document.getElementById('sellerFilter');
+        const uniqueSellers = [...new Set(data.map(item => item.Seller_Name || '未知卖家'))];
+        uniqueSellers.sort((a, b) => a.localeCompare(b, 'zh-CN'));
+        select.innerHTML = '<option value="ALL">全部卖家</option>';
+        uniqueSellers.forEach(seller => { const option = document.createElement('option'); option.value = seller; option.textContent = seller; select.appendChild(option); });
+        select.addEventListener('change', () => { applyFilterAndSort(); });
+    }
+
+    document.getElementById('titleFilter').addEventListener('input', () => { applyFilterAndSort(); });
+
+    window.handleSort = function(key) {
+        if (currentSortKey === key) { currentSortAsc = !currentSortAsc; } else { currentSortKey = key; currentSortAsc = true; }
+        updateSortIcons(); applyFilterAndSort();
+    };
+
+    function updateSortIcons() {
+        ['Seller_Name', 'Price_CNY', 'End_Time', 'Is_Bid'].forEach(key => { const el = document.getElementById(`sort-icon-${key}`); if(el) { el.innerText = '↕'; el.className = 'sort-icon'; } });
+        const activeIcon = document.getElementById(`sort-icon-${currentSortKey}`);
+        if (activeIcon) { activeIcon.innerText = currentSortAsc ? '↑' : '↓'; activeIcon.className = 'sort-icon sort-active'; }
+    }
+
+    function applyFilterAndSort() {
+        let displayData = [...globalValidData];
+
+        displayData.forEach(item => {
+            const rt = getRealTimeData(item);
+            item._rt_sec = rt.sec;
+            item._rt_str = rt.str;
+        });
+
+        const selectedSeller = document.getElementById('sellerFilter').value;
+        if (selectedSeller !== 'ALL') displayData = displayData.filter(item => (item.Seller_Name || '未知卖家') === selectedSeller);
+
+        const titleSearchWord = document.getElementById('titleFilter').value.trim().toLowerCase();
+        if (titleSearchWord) displayData = displayData.filter(item => item.Card_Title && item.Card_Title.toLowerCase().includes(titleSearchWord));
+
+        // 凑套匹配过滤：仅看匹配到未搜集卡片的记录
+        if (matchUncollectedOnly) displayData = displayData.filter(item => item.Has_Uncollected_Match);
+
+        displayData.sort((a, b) => {
+            let valA = a[currentSortKey], valB = b[currentSortKey];
+
+            if (currentSortKey === 'End_Time') return currentSortAsc ? a._rt_sec - b._rt_sec : b._rt_sec - a._rt_sec;
+            if(currentSortKey === 'Is_Bid') { valA = valA || '否'; valB = valB || '否'; return currentSortAsc ? valB.localeCompare(valA, 'zh-CN') : valA.localeCompare(valB, 'zh-CN'); }
+            else if (currentSortKey === 'Seller_Name') { valA = valA || '未知卖家'; valB = valB || '未知卖家'; return currentSortAsc ? valA.localeCompare(valB, 'zh-CN') : valB.localeCompare(valA, 'zh-CN'); }
+            else if (currentSortKey === 'Price_CNY') { return currentSortAsc ? valA - valB : valB - valA; }
+            return 0;
+        });
+
+        const tbody = document.getElementById('dataTableBody');
+        tbody.innerHTML = '';
+        if (displayData.length === 0) { tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; color:#bfbfbf; padding: 40px 0;">未找到符合筛选条件的卡片</td></tr>`; return; }
+
+        displayData.forEach((item, index) => {
+            const tr = document.createElement('tr');
+
+            const itemDataStr = encodeURIComponent(JSON.stringify({ Card_Title: item.Card_Title, Seller_Name: item.Seller_Name || '未知卖家', Price_CNY: item.Price_CNY, End_Time: item.End_Time || '' }));
+
+            const isBid = (item.Is_Bid === '是');
+            const statusHtml = isBid ? '<span class="tag-bid">已出价</span>' : '<span class="tag-unbid">未出价</span>';
+
+            const isRedTime = item._rt_sec > 0 && item._rt_sec < 3600;
+            const isEnded = item._rt_sec <= 0;
+
+            let timeStyle = "color: #595959;";
+            if (isEnded) timeStyle = "color: #bfbfbf; text-decoration: line-through;";
+            else if (isRedTime) timeStyle = "color: #f5222d; font-weight: 700;";
+
+            // 构造凑套匹配标签 HTML
+            let matchBadgesHtml = '';
+            if (item.Matched_Collections && item.Matched_Collections.length > 0) {
+                matchBadgesHtml = item.Matched_Collections.map(m => {
+                    const cls = m.collected ? 'collected' : 'uncollected';
+                    const icon = m.collected ? '✓' : '🎯';
+                    const matchLabel = m.match_type ? `(${m.match_type})` : '';
+                    return `<span class="match-badge ${cls}" title="${escapeAttr(m.series_name)} · ${escapeAttr(m.code)}">${icon} ${escapeHtml(m.code || '—')} <span class="match-series">${escapeHtml(m.series_name)}</span> ${matchLabel}</span>`;
+                }).join('');
+                // 有未搜集匹配的行高亮
+                if (item.Has_Uncollected_Match) tr.classList.add('has-uncollected-match');
+            }
+
+            const titleHtml = item.Card_URL
+                ? `<a href="${item.Card_URL}" target="_blank" class="card-link">${item.Card_Title}</a>${matchBadgesHtml}`
+                : `<span style="color: #333;">${item.Card_Title}</span>${matchBadgesHtml}`;
+
+            tr.innerHTML = `
+                <td><input type="checkbox" class="row-checkbox" data-item="${itemDataStr}" ${isBid ? 'disabled title="已出价"' : ''}></td>
+                <td style="color:#bfbfbf;">${index + 1}</td>
+                <td style="line-height: 1.4;">${titleHtml}</td>
+                <td style="color: #595959;">${item.Seller_Name || '未知卖家'}</td>
+                <td class="price-text">￥${item.Price_CNY.toFixed(2)}</td>
+                <td style="${timeStyle}">${item._rt_str}</td>
+                <td>${statusHtml}</td>
+            `;
+            tbody.appendChild(tr);
+        });
+        document.getElementById('selectAllCheckbox').checked = false;
+    }
+
+    document.getElementById('selectAllCheckbox').addEventListener('change', function(e) {
+        document.querySelectorAll('.row-checkbox:not(:disabled)').forEach(cb => cb.checked = e.target.checked);
+    });
+
+    document.getElementById('markBidBtn').addEventListener('click', async function() {
+        const checkedBoxes = document.querySelectorAll('.row-checkbox:checked:not(:disabled)');
+        if(checkedBoxes.length === 0) { alert("请先在表格中勾选！"); return; }
+        const itemsToMark = Array.from(checkedBoxes).map(cb => JSON.parse(decodeURIComponent(cb.getAttribute('data-item'))));
+        
+        const originalText = this.innerText;
+        this.innerText = "正在同步..."; this.disabled = true;
+
+        try {
+            const response = await fetch('/api/mark_bid', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ keyword: currentKeyword, items: itemsToMark }) });
+            const res = await response.json();
+            if(res.success) {
+                itemsToMark.forEach(markItem => {
+                    const target = globalValidData.find(gItem => gItem.Card_Title === markItem.Card_Title && (gItem.Seller_Name || '未知卖家') === markItem.Seller_Name && gItem.Price_CNY === markItem.Price_CNY);
+                    if(target) target.Is_Bid = '是';
+                });
+                applyFilterAndSort(); 
+                alert("更新成功！CSV 文件已同步保存。");
+            } else { alert("更新失败: " + res.error); }
+        } catch (error) { alert("请求出错: " + error.message); } 
+        finally { this.innerText = originalText; this.disabled = false; }
+    });
+
+    window.addEventListener('resize', () => { scatterChart.resize(); sellerChart.resize(); pricePieChart.resize(); });
+
+    // ============================================================
+    // 自动监控功能
+    // ============================================================
+    let monitorConfig = { keywords: [], schedule_time: '09:00', enabled: false, last_run: null, last_run_status: null };
+    let monitorHistory = [];
+
+    async function loadMonitorConfig() {
+        try {
+            const resp = await fetch('/api/monitor/config');
+            monitorConfig = await resp.json();
+            renderMonitorUI();
+        } catch(e) { console.error('加载监控配置失败:', e); }
+    }
+
+    async function loadMonitorHistory() {
+        try {
+            const resp = await fetch('/api/monitor/history');
+            monitorHistory = await resp.json();
+            renderMonitorHistory();
+        } catch(e) { console.error('加载历史记录失败:', e); }
+    }
+
+    function renderMonitorUI() {
+        document.getElementById('monitorTimeInput').value = monitorConfig.schedule_time || '09:00';
+        const toggle = document.getElementById('monitorToggle');
+        const statusText = document.getElementById('monitorStatusText');
+        if (monitorConfig.enabled) {
+            toggle.classList.add('on');
+            statusText.textContent = '已开启';
+            statusText.style.color = '#209b73';
+        } else {
+            toggle.classList.remove('on');
+            statusText.textContent = '已关闭';
+            statusText.style.color = '#8c8c8c';
+        }
+        if (monitorConfig.last_run) {
+            const d = new Date(monitorConfig.last_run * 1000);
+            document.getElementById('monitorLastRun').textContent = d.toLocaleString('zh-CN');
+        } else {
+            document.getElementById('monitorLastRun').textContent = '-';
+        }
+        const list = document.getElementById('monitorKeywordsList');
+        list.innerHTML = '';
+        const keywords = monitorConfig.keywords || [];
+        if (keywords.length === 0) {
+            addMonitorKeywordInput('');
+        } else {
+            keywords.forEach(kw => addMonitorKeywordInput(kw));
+        }
+    }
+
+    function renderMonitorHistory() {
+        const container = document.getElementById('monitorHistoryList');
+        const statsEl = document.getElementById('monitorHistoryStats');
+        if (!monitorHistory || monitorHistory.length === 0) {
+            container.innerHTML = `<div class="monitor-empty">
+                <div class="monitor-empty-icon">📋</div>
+                <div>暂无运行记录</div>
+            </div>`;
+            if (statsEl) statsEl.textContent = '暂无记录';
+            updateMonitorHistorySelectedInfo();
+            return;
+        }
+        // 保留倒序的最近 100 条（便于批量操作）
+        const recent = monitorHistory.slice(-100).reverse();
+        const successCount = recent.filter(h => h.status === 'success').length;
+        const totalItems = recent.reduce((sum, h) => sum + (h.total_items || 0), 0);
+        if (statsEl) statsEl.textContent = `共 ${recent.length} 次 · 成功 ${successCount} · 累计 ${totalItems} 条数据`;
+        container.innerHTML = recent.map((h, i) => {
+            const isFail = h.status !== 'success';
+            const resultText = isFail ? `失败` : `${h.total_items} 条`;
+            const safeKw = (h.keyword || '').replace(/'/g, "\\'");
+            const canView = !isFail && h.total_items > 0;
+            const clickAttr = canView ? `onclick="viewHistoryData('${safeKw}')"` : '';
+            return `<div class="monitor-history-item ${isFail ? 'fail' : ''}" data-idx="${i}">
+                <input type="checkbox" class="h-cb" data-idx="${i}" onclick="event.stopPropagation()" onchange="updateMonitorHistorySelectedInfo()">
+                <div class="h-main" ${clickAttr}>
+                    <div class="h-kw">${escapeHtml(h.keyword || '')}</div>
+                    <div class="h-time">${escapeHtml(h.time_str || '')}</div>
+                </div>
+                <div class="h-side">
+                    <div class="h-result ${isFail ? 'fail' : 'success'}">${resultText}</div>
+                    ${canView ? '<div class="h-view">点击查看 →</div>' : ''}
+                </div>
+            </div>`;
+        }).join('');
+        updateMonitorHistorySelectedInfo();
+    }
+
+    function selectAllMonitorHistory(checked) {
+        document.querySelectorAll('.h-cb').forEach(cb => cb.checked = checked);
+        updateMonitorHistorySelectedInfo();
+    }
+
+    function updateMonitorHistorySelectedInfo() {
+        const checked = document.querySelectorAll('.h-cb:checked');
+        const info = document.getElementById('monitorHistorySelectedInfo');
+        if (info) {
+            info.textContent = checked.length === 0 ? '未选择记录' : `已选择 ${checked.length} 条`;
+        }
+    }
+
+    async function deleteMonitorHistoryBatch() {
+        const cbs = document.querySelectorAll('.h-cb:checked');
+        if (cbs.length === 0) { alert('请先勾选要删除的历史记录'); return; }
+        // 前端显示用的是 monitorHistory.slice(-100).reverse()，索引基于这个 recent 列表
+        const recent = monitorHistory.slice(-100).reverse();
+        // 收集选中项对应的 keyword，用于二次确认提示
+        const selectedKeywords = Array.from(cbs).map(cb => {
+            const idx = parseInt(cb.getAttribute('data-idx'), 10);
+            return recent[idx]?.keyword || '';
+        }).filter(Boolean);
+        const uniqueKeywords = [...new Set(selectedKeywords)];
+        const confirmMsg = `确认删除选中的 ${cbs.length} 条历史记录？\n\n` +
+            `⚠️ 注意：将同时删除以下关键字的 CSV 数据文件：\n${uniqueKeywords.map(k => `• ${k}`).join('\n')}\n\n` +
+            `（同一关键字的所有累计数据都会被清除）`;
+        if (!confirm(confirmMsg)) return;
+        const indices = Array.from(cbs).map(cb => parseInt(cb.getAttribute('data-idx'), 10));
+        try {
+            const resp = await fetch('/api/monitor/history', {
+                method: 'DELETE',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ indices })
+            });
+            const data = await resp.json();
+            if (data.success) {
+                let msg = `成功删除 ${data.deleted_count} 条历史记录`;
+                if (data.deleted_csv_files && data.deleted_csv_files.length > 0) {
+                    msg += `\n\n同时删除了 ${data.deleted_csv_files.length} 个 CSV 文件：\n${data.deleted_csv_files.map(f => `• ${f}`).join('\n')}`;
+                }
+                alert(msg);
+                await loadMonitorHistory();
+            } else { alert('删除失败: ' + (data.error || '')); }
+        } catch(e) { alert('请求出错: ' + e.message); }
+    }
+
+    async function viewHistoryData(keyword) {
+        currentKeyword = keyword;
+        document.getElementById('keywordInput').value = currentKeyword;
+        await loadMonitorDataToView(currentKeyword);
+        // 切回首页展示数据
+        switchPage('home');
+    }
+
+    function addMonitorKeywordInput(value) {
+        const list = document.getElementById('monitorKeywordsList');
+        const div = document.createElement('div');
+        div.className = 'monitor-keyword-item';
+        div.innerHTML = `<input type="text" value="${value}" placeholder="输入监控关键字"><button class="monitor-keyword-remove" onclick="this.parentElement.remove()">&times;</button>`;
+        list.appendChild(div);
+    }
+
+    function toggleMonitorEnabled() {
+        monitorConfig.enabled = !monitorConfig.enabled;
+        renderMonitorUI();
+    }
+
+    async function saveMonitorConfig() {
+        const inputs = document.querySelectorAll('#monitorKeywordsList input');
+        const keywords = Array.from(inputs).map(i => i.value.trim()).filter(v => v);
+        const schedule_time = document.getElementById('monitorTimeInput').value;
+        const enabled = monitorConfig.enabled;
+        try {
+            const resp = await fetch('/api/monitor/config', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ keywords, schedule_time, enabled })
+            });
+            const data = await resp.json();
+            if (data.success) {
+                monitorConfig = data.config;
+                alert('配置已保存');
+            } else { alert('保存失败: ' + (data.error || '未知错误')); }
+        } catch(e) { alert('保存失败: ' + e.message); }
+    }
+
+    async function runMonitorNow() {
+        const btn = document.getElementById('monitorRunBtn');
+        const originalText = btn.innerText;
+        btn.innerText = '正在抓取，请稍候...';
+        btn.disabled = true;
+        try {
+            const resp = await fetch('/api/monitor/run', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({}) });
+            const data = await resp.json();
+            if (data.success) {
+                let summary = data.results.map(r => r.keyword + ': ' + (r.status === 'success' ? r.total_items + ' 条' : '失败')).join('\n');
+                alert('抓取完成\n\n' + summary);
+                await loadMonitorConfig();
+                await loadMonitorHistory();
+                // 自动加载第一个成功关键字的数据到前台展示
+                const firstSuccess = data.results.find(r => r.status === 'success' && r.total_items > 0);
+                if (firstSuccess) {
+                    currentKeyword = firstSuccess.keyword;
+                    document.getElementById('keywordInput').value = currentKeyword;
+                    await loadMonitorDataToView(currentKeyword);
+                    // 如果有多个关键字，提示可切换
+                    const successCount = data.results.filter(r => r.status === 'success' && r.total_items > 0).length;
+                    if (successCount > 1) {
+                        renderMonitorKeywordTabs(data.results);
+                    }
+                }
+            } else { alert('运行失败: ' + (data.error || '未知错误')); }
+        } catch(e) { alert('请求出错: ' + e.message); }
+        finally { btn.innerText = originalText; btn.disabled = false; }
+    }
+
+    async function loadMonitorDataToView(keyword) {
+        try {
+            const resp = await fetch('/api/monitor/data?keyword=' + encodeURIComponent(keyword));
+            if (!resp.ok) { const err = await resp.json(); alert('加载数据失败: ' + (err.error || '未知错误')); return; }
+            const data = await resp.json();
+            if (data.length === 0) { alert('关键字 "' + keyword + '" 没有数据'); return; }
+            processAndRender(data);
+        } catch(e) { alert('加载数据出错: ' + e.message); }
+    }
+
+    function renderMonitorKeywordTabs(results) {
+        // 在表格区域上方渲染关键字切换标签
+        const tableSection = document.getElementById('detailTableSection');
+        let tabBar = document.getElementById('monitorKeywordTabs');
+        if (!tabBar) {
+            tabBar = document.createElement('div');
+            tabBar.id = 'monitorKeywordTabs';
+            tabBar.style.cssText = 'display:flex; gap:8px; margin-bottom:16px; flex-wrap:wrap;';
+            tableSection.parentElement.insertBefore(tabBar, tableSection);
+        }
+        const successResults = results.filter(r => r.status === 'success' && r.total_items > 0);
+        tabBar.innerHTML = successResults.map((r, i) => {
+            const active = (r.keyword === currentKeyword) ? 'style="background:linear-gradient(135deg,#4080e0,#6060e0);color:#fff;border-color:transparent;"' : '';
+            return `<button onclick="loadMonitorDataToView('${r.keyword.replace(/'/g, "\\'")}')" style="padding:6px 16px;border-radius:8px;border:1px solid #e0e0e0;background:#fff;color:#595959;font-size:13px;cursor:pointer;transition:all 0.2s;font-weight:500;" ${active} onmouseover="if(!this.style.background.includes('gradient'))this.style.borderColor='#4080e0'" onmouseout="if(!this.style.background.includes('gradient'))this.style.borderColor='#e0e0e0'">${r.keyword} (${r.total_items})</button>`;
+        }).join('');
+    }
+
+    // ============================================================
+    // 凑套系列管理（左侧菜单页 + 卡片网格 + 详情弹窗）
+    // ============================================================
+    let collectionsData = [];
+    let currentCollectionId = null;
+    // 正在抓取的系列集合
+    const scrapingCollections = new Set();
+
+    // 页面切换
+    function switchPage(page) {
+        document.querySelectorAll('.page-view').forEach(el => el.classList.remove('active'));
+        document.querySelectorAll('.sidebar-nav-item').forEach(el => el.classList.remove('active'));
+        const target = document.getElementById('page-' + page);
+        if (target) target.classList.add('active');
+        const navItem = document.querySelector(`.sidebar-nav-item[data-page="${page}"]`);
+        if (navItem) navItem.classList.add('active');
+        // 进入凑套页时加载数据
+        if (page === 'collection') loadCollections();
+        // 进入监控页时加载配置与历史
+        if (page === 'monitor') {
+            if (typeof loadMonitorConfig === 'function') loadMonitorConfig();
+            if (typeof loadMonitorHistory === 'function') loadMonitorHistory();
+        }
+        // 离开首页时 resize 图表避免显示异常
+        if (page === 'home') {
+            setTimeout(() => {
+                if (typeof scatterChart !== 'undefined') scatterChart.resize();
+                if (typeof sellerChart !== 'undefined') sellerChart.resize();
+                if (typeof pricePieChart !== 'undefined') pricePieChart.resize();
+            }, 100);
+        }
+    }
+
+    // 添加系列对话框
+    function openAddCollectionModal() {
+        document.getElementById('collectionInput').value = '';
+        document.getElementById('collectionAddModal').classList.add('open');
+    }
+    function closeAddCollectionModal() {
+        document.getElementById('collectionAddModal').classList.remove('open');
+    }
+
+    // 凑套详情弹窗
+    function openCollectionModal(cid) {
+        currentCollectionId = cid;
+        const c = collectionsData.find(x => x.id === cid);
+        if (!c) return;
+        document.getElementById('collectionModalTitle').textContent = c.series_name;
+        renderCollectionDetail(cid);
+        document.getElementById('collectionModal').classList.add('open');
+    }
+    function closeCollectionModal() {
+        document.getElementById('collectionModal').classList.remove('open');
+    }
+
+    async function loadCollections() {
+        try {
+            const resp = await fetch('/api/collections');
+            collectionsData = await resp.json();
+            renderCollectionGrid();
+            // 若弹窗已打开，且当前系列仍存在，则刷新弹窗内容
+            const modal = document.getElementById('collectionModal');
+            if (modal.classList.contains('open') && currentCollectionId !== null) {
+                const stillExists = collectionsData.find(c => c.id === currentCollectionId);
+                if (stillExists) {
+                    document.getElementById('collectionModalTitle').textContent = stillExists.series_name;
+                    renderCollectionDetail(currentCollectionId);
+                } else {
+                    closeCollectionModal();
+                }
+            }
+        } catch(e) { console.error('加载凑套数据失败:', e); }
+    }
+
+    function renderCollectionGrid() {
+        const grid = document.getElementById('collectionGrid');
+        if (!collectionsData || collectionsData.length === 0) {
+            grid.innerHTML = `<div class="collection-empty-state">
+                <div class="collection-empty-state-icon">🃏</div>
+                <div>暂无凑套系列，点击右上角"+ 添加系列"创建第一个</div>
+            </div>`;
+            return;
+        }
+        grid.innerHTML = collectionsData.map(c => {
+            const total = c.cards.length;
+            const collected = c.cards.filter(card => card.collected).length;
+            const uncollected = total - collected;
+            const progress = total > 0 ? Math.round(collected / total * 100) : 0;
+            let badgeClass = 'partial', badgeText = '进行中';
+            if (total > 0 && collected === total) { badgeClass = 'done'; badgeText = '已完成'; }
+            else if (collected === 0) { badgeClass = 'zero'; badgeText = '未开始'; }
+            // 抓取状态：是否正在抓取
+            const isScraping = scrapingCollections.has(c.id);
+            const scrapeBtnClass = isScraping ? 'collection-scrape-btn scraping' : 'collection-scrape-btn';
+            const scrapeBtnText = isScraping ? '抓取中...' : '🔍 快捷抓取';
+            const scrapeBtnDisabled = isScraping ? 'disabled' : '';
+            // 上次抓取时间
+            const lastScrape = c.last_scrape_time || '';
+            const lastScrapeHtml = lastScrape
+                ? `<span class="collection-card-last-scrape">上次: ${escapeHtml(lastScrape)}</span>`
+                : '<span class="collection-card-last-scrape">未抓取</span>';
+            return `<div class="collection-card" onclick="openCollectionModal(${c.id})">
+                <div class="collection-card-badge ${badgeClass}">${badgeText}</div>
+                <div class="collection-card-name">${escapeHtml(c.series_name)}</div>
+                <div class="collection-card-count">共 ${total} 张卡片</div>
+                <div class="collection-card-progress-row">
+                    <span class="collection-card-progress-text">已搜集 ${collected} / ${total}</span>
+                    <span class="collection-card-progress-percent">${progress}%</span>
+                </div>
+                <div class="collection-card-progress-bar">
+                    <div class="collection-card-progress-fill" style="width:${progress}%"></div>
+                </div>
+                <div class="collection-card-stats">
+                    <span>已搜集 <strong>${collected}</strong></span>
+                    <span>未搜集 <strong>${uncollected}</strong></span>
+                </div>
+                <div class="collection-card-footer">
+                    ${lastScrapeHtml}
+                    <button class="${scrapeBtnClass}" ${scrapeBtnDisabled} onclick="event.stopPropagation(); scrapeCollection(${c.id})">${scrapeBtnText}</button>
+                </div>
+            </div>`;
+        }).join('');
+    }
+
+    async function scrapeCollection(cid) {
+        const c = collectionsData.find(x => x.id === cid);
+        if (!c) { alert('未找到系列'); return; }
+        const keyword = c.series_name;
+        if (!keyword) { alert('系列名称为空，无法抓取'); return; }
+        // 二次确认
+        if (!confirm(`将以"${keyword}"为关键词抓取卡淘数据，抓取完成后自动匹配该系列的未搜集卡片并跳转首页查看。是否继续？`)) return;
+        // 标记抓取中
+        scrapingCollections.add(cid);
+        renderCollectionGrid();
+        // 切到首页准备展示
+        switchPage('home');
+        document.getElementById('keywordInput').value = keyword;
+        currentKeyword = keyword;
+        // 显示 loading
+        document.getElementById('loadingText').innerHTML = `正在抓取"${keyword}"...<br>完成后将自动匹配凑套卡片`;
+        document.getElementById('loadingOverlay').style.display = 'flex';
+        document.getElementById('detailTableSection').style.display = 'none';
+        try {
+            const response = await fetch('/api/search', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ keyword: keyword })
+            });
+            if (!response.ok) throw new Error('服务器响应错误');
+            const result = await response.json();
+            const items = result.items || [];
+            const newCount = result.new_count || 0;
+            const totalCount = result.total_count || items.length;
+            if (items.length === 0) {
+                alert(`未抓取到"${keyword}"相关数据`);
+            } else {
+                // processAndRender 内部会自动调用 /api/scrape/match 进行凑套匹配
+                await processAndRender(items);
+                // 增量抓取提示
+                if (newCount > 0) {
+                    showToast(`✨ 本次新增 ${newCount} 条，共 ${totalCount} 条数据`, 'success');
+                } else {
+                    showToast(`未新增数据，已展示全部 ${totalCount} 条历史数据`, 'info');
+                }
+                // 统计匹配到的未搜集卡片
+                const uncollectedMatches = globalValidData.filter(item => item.Has_Uncollected_Match);
+                if (uncollectedMatches.length > 0) {
+                    // 提取匹配到的未搜集卡片信息
+                    const matchedCards = new Map();
+                    uncollectedMatches.forEach(item => {
+                        (item.Matched_Collections || []).forEach(m => {
+                            if (!m.collected) {
+                                const key = `${m.cid}|${m.code}`;
+                                if (!matchedCards.has(key)) {
+                                    matchedCards.set(key, { series: m.series_name, code: m.code, name: m.player_cn });
+                                }
+                            }
+                        });
+                    });
+                    const matchList = Array.from(matchedCards.values()).map(m => `• ${m.code || '—'} ${m.name} [${m.series}]`).join('\n');
+                    alert(`抓取完成！共 ${totalCount} 条数据（本次新增 ${newCount} 条）\n\n匹配到 ${uncollectedMatches.length} 条未搜集卡片记录：\n${matchList}\n\n已自动在首页展示，可点击"仅看匹配"快速筛选`);
+                } else {
+                    alert(`抓取完成！共 ${totalCount} 条数据（本次新增 ${newCount} 条）\n\n未匹配到该系列的未搜集卡片`);
+                }
+            }
+        } catch(e) { alert('抓取失败: ' + e.message); }
+        finally {
+            scrapingCollections.delete(cid);
+            document.getElementById('loadingOverlay').style.display = 'none';
+            // 更新该系列的上次抓取时间
+            c.last_scrape_time = new Date().toLocaleString('zh-CN', { month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' });
+            renderCollectionGrid();
+        }
+    }
+
+    function renderCollectionDetail(cid) {
+        const c = collectionsData.find(x => x.id === cid);
+        const panel = document.getElementById('collectionDetailPanel');
+        if (!c) {
+            panel.innerHTML = '<div class="collection-detail-empty">未找到系列数据</div>';
+            return;
+        }
+        const total = c.cards.length;
+        const collected = c.cards.filter(card => card.collected).length;
+        const uncollected = total - collected;
+        panel.innerHTML = `
+            <div class="collection-detail-header">
+                <div>
+                    <div class="collection-detail-title">${escapeHtml(c.series_name)}</div>
+                    <div class="collection-detail-stats">共 ${total} 张 · 已搜集 ${collected} 张 · 未搜集 ${uncollected} 张</div>
+                </div>
+                <button class="collection-delete-btn" onclick="deleteCollection(${c.id})" title="删除系列">删除系列</button>
+            </div>
+            <div class="collection-toolbar">
+                <button class="collection-toolbar-btn" onclick="selectAllCards(true)">全选</button>
+                <button class="collection-toolbar-btn" onclick="selectAllCards(false)">取消全选</button>
+                <button class="collection-toolbar-btn" onclick="selectInvertCards()">反选</button>
+                <button class="collection-toolbar-btn" onclick="selectCollectedOnly(true)">仅选已搜集</button>
+                <button class="collection-toolbar-btn" onclick="selectCollectedOnly(false)">仅选未搜集</button>
+                <span style="width:1px; height:18px; background:#e0e0e0;"></span>
+                <button class="collection-toolbar-btn success" onclick="markCollectionCards(${c.id}, true)">标记已搜集</button>
+                <button class="collection-toolbar-btn" onclick="markCollectionCards(${c.id}, false)">标记未搜集</button>
+                <span class="collection-toolbar-info" id="selectedCountInfo">未勾选任何卡片</span>
+            </div>
+            <div id="collectionCardList">
+                ${c.cards.map((card, idx) => `
+                    <div class="collection-card-row${card.collected ? ' collected' : ''}" data-idx="${idx}">
+                        <input type="checkbox" class="collection-cb" data-idx="${idx}" onchange="updateSelectedInfo()">
+                        <div class="card-thumb" data-code="${escapeAttr(card.code || '')}">🃏</div>
+                        <span class="collection-card-code">${escapeHtml(card.code || '—')}</span>
+                        <span class="collection-card-player">${escapeHtml(card.player_cn)}${card.player_en ? `<span class="collection-card-en">(${escapeHtml(card.player_en)})</span>` : ''}</span>
+                        ${card.team ? `<span class="collection-card-team">${escapeHtml(card.team)}</span>` : ''}
+                        <span class="collection-card-status ${card.collected ? 'yes' : 'no'}">${card.collected ? '已搜集' : '未搜集'}</span>
+                    </div>
+                `).join('')}
+            </div>
+        `;
+        updateSelectedInfo();
+        // 异步加载卡片图片
+        loadCollectionImages(cid);
+    }
+
+    function selectAllCards(checked) {
+        document.querySelectorAll('.collection-cb').forEach(cb => cb.checked = checked);
+        updateSelectedInfo();
+    }
+
+    function selectInvertCards() {
+        document.querySelectorAll('.collection-cb').forEach(cb => cb.checked = !cb.checked);
+        updateSelectedInfo();
+    }
+
+    // 按卡片当前搜集状态筛选勾选：collected=true 表示仅勾选已搜集的，false 表示仅勾选未搜集的
+    function selectCollectedOnly(collected) {
+        const coll = collectionsData.find(c => c.id === currentCollectionId);
+        if (!coll) return;
+        document.querySelectorAll('.collection-cb').forEach(cb => {
+            const idx = parseInt(cb.getAttribute('data-idx'), 10);
+            const card = coll.cards[idx];
+            cb.checked = !!(card && card.collected === collected);
+        });
+        updateSelectedInfo();
+    }
+
+    function updateSelectedInfo() {
+        const checked = document.querySelectorAll('.collection-cb:checked');
+        const info = document.getElementById('selectedCountInfo');
+        if (info) {
+            info.textContent = checked.length === 0 ? '未勾选任何卡片' : `已勾选 ${checked.length} 张`;
+        }
+    }
+
+    async function markCollectionCards(cid, collected) {
+        const cbs = document.querySelectorAll('.collection-cb:checked');
+        if (cbs.length === 0) { alert('请先勾选卡片'); return; }
+        const coll = collectionsData.find(c => c.id === cid);
+        if (!coll) { alert('系列不存在'); return; }
+        // 通过 data-idx 精确匹配卡片，避免 code 重复或为空导致的错位
+        const indices = Array.from(cbs).map(cb => parseInt(cb.getAttribute('data-idx'), 10)).filter(i => !isNaN(i));
+        if (indices.length === 0) { alert('未识别到卡片索引'); return; }
+        try {
+            const resp = await fetch(`/api/collections/${cid}/cards`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ card_indices: indices, collected })
+            });
+            const data = await resp.json();
+            if (data.success) {
+                // 同步内存数据
+                indices.forEach(i => {
+                    if (coll.cards[i]) coll.cards[i].collected = collected;
+                });
+                // 局部更新 DOM：仅改样式与状态标签，checkbox 勾选状态保持不变
+                const rows = document.querySelectorAll('.collection-card-row');
+                indices.forEach(i => {
+                    const row = rows[i];
+                    if (!row) return;
+                    const card = coll.cards[i];
+                    row.classList.toggle('collected', card.collected);
+                    const statusSpan = row.querySelector('.collection-card-status');
+                    if (statusSpan) {
+                        statusSpan.className = `collection-card-status ${card.collected ? 'yes' : 'no'}`;
+                        statusSpan.textContent = card.collected ? '已搜集' : '未搜集';
+                    }
+                });
+                // 更新详情弹窗顶部的统计信息
+                const total = coll.cards.length;
+                const collectedCount = coll.cards.filter(card => card.collected).length;
+                const uncollected = total - collectedCount;
+                const panel = document.getElementById('collectionDetailPanel');
+                const statsSpan = panel && panel.querySelector('.collection-detail-stats');
+                if (statsSpan) {
+                    statsSpan.textContent = `共 ${total} 张 · 已搜集 ${collectedCount} 张 · 未搜集 ${uncollected} 张`;
+                }
+                // 刷新左侧卡片网格里的对应卡片（进度、徽章）
+                renderCollectionGrid();
+                // 清除所有复选框的勾选状态
+                document.querySelectorAll('.collection-cb').forEach(cb => cb.checked = false);
+                updateSelectedInfo();
+            } else { alert('更新失败: ' + (data.error || '')); }
+        } catch(e) { alert('请求出错: ' + e.message); }
+    }
+
+    async function createCollection() {
+        const text = document.getElementById('collectionInput').value.trim();
+        if (!text) { alert('请输入凑套信息'); return; }
+        try {
+            const resp = await fetch('/api/collections', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ text })
+            });
+            const data = await resp.json();
+            if (data.success) {
+                const c = data.collection;
+                alert(`解析成功！\n系列: ${c.series_name}\n卡片: ${c.cards.length} 张`);
+                document.getElementById('collectionInput').value = '';
+                closeAddCollectionModal();
+                await loadCollections();
+                // 自动打开新创建系列的详情弹窗
+                if (c.id !== undefined) openCollectionModal(c.id);
+            } else { alert('解析失败: ' + (data.error || '')); }
+        } catch(e) { alert('请求出错: ' + e.message); }
+    }
+
+    async function deleteCollection(cid) {
+        if (!confirm('确认删除此系列？')) return;
+        try {
+            await fetch(`/api/collections/${cid}`, { method: 'DELETE' });
+            // 如果删除的是当前弹窗打开的系列，关闭弹窗
+            if (currentCollectionId === cid) {
+                closeCollectionModal();
+                currentCollectionId = null;
+            }
+            await loadCollections();
+        } catch(e) { alert('删除出错: ' + e.message); }
+    }
+
+    // HTML 转义工具
+    function escapeHtml(str) {
+        if (str == null) return '';
+        return String(str).replace(/[&<>"']/g, s => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s]));
+    }
+    function escapeAttr(str) {
+        if (str == null) return '';
+        return String(str).replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+    }
+
+    // ============================================================
+    // 卡片图片异步加载
+    // ============================================================
+    async function loadCollectionImages(cid) {
+        const panel = document.getElementById('collectionDetailPanel');
+        if (!panel) return;
+        try {
+            const resp = await fetch(`/api/collections/${cid}/card-images`);
+            if (!resp.ok) return;
+            const data = await resp.json();
+            const images = data.images || {};
+            panel.querySelectorAll('.card-thumb').forEach(thumb => {
+                const code = thumb.getAttribute('data-code');
+                if (code && images[code]) {
+                    thumb.innerHTML = `<img src="${escapeAttr(images[code])}" alt="${escapeAttr(code)}" onerror="this.parentNode.innerHTML='🚫'">`;
+                } else {
+                    thumb.innerHTML = '🚫';
+                }
+            });
+        } catch(e) { console.warn('加载图片失败:', e); }
+    }
+
+    // ============================================================
+    // Toast 轻提示
+    // ============================================================
+    function showToast(msg, type) {
+        const container = document.getElementById('toastContainer');
+        if (!container) return;
+        const toast = document.createElement('div');
+        toast.className = 'toast ' + (type || 'info');
+        toast.textContent = msg;
+        container.appendChild(toast);
+        setTimeout(() => {
+            toast.classList.add('fading');
+            setTimeout(() => { if (toast.parentNode) toast.parentNode.removeChild(toast); }, 300);
+        }, 3000);
+    }
+
+    // ============================================================
+    // 暗色模式 / 主题切换
+    // ============================================================
+    function toggleTheme() {
+        const current = document.documentElement.dataset.theme || 'light';
+        const next = current === 'dark' ? 'light' : 'dark';
+        document.documentElement.dataset.theme = next;
+        updateThemeBtnIcon(next);
+        // 持久化
+        fetch('/api/system/preferences', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ theme: next })
+        }).catch(e => console.warn('保存主题偏好失败:', e));
+    }
+
+    function updateThemeBtnIcon(theme) {
+        const btn = document.getElementById('themeToggleBtn');
+        if (btn) btn.textContent = theme === 'dark' ? '☀️' : '🌙';
+    }
+
+    async function loadPreferences() {
+        try {
+            const resp = await fetch('/api/system/preferences');
+            if (!resp.ok) return;
+            const data = await resp.json();
+            const theme = data.theme || 'light';
+            document.documentElement.dataset.theme = theme;
+            updateThemeBtnIcon(theme);
+        } catch(e) { console.warn('加载偏好失败:', e); }
+    }
+
+    // ============================================================
+    // 数据清理
+    // ============================================================
+    let cleanupPreviewData = null;
+
+    function openCleanupModal() {
+        document.getElementById('cleanupModal').classList.add('open');
+        loadCleanupPreview();
+    }
+
+    function closeCleanupModal() {
+        document.getElementById('cleanupModal').classList.remove('open');
+    }
+
+    async function loadCleanupPreview() {
+        const body = document.getElementById('cleanupModalBody');
+        body.innerHTML = '<div class="cleanup-loading">正在加载清理项...</div>';
+        try {
+            const resp = await fetch('/api/system/cleanup/preview');
+            if (!resp.ok) throw new Error('服务器响应错误');
+            cleanupPreviewData = await resp.json();
+            renderCleanupPreview(cleanupPreviewData);
+        } catch(e) {
+            body.innerHTML = `<div class="cleanup-loading" style="color:#f5222d;">加载失败: ${escapeHtml(e.message)}</div>`;
+        }
+    }
+
+    function renderCleanupPreview(p) {
+        const body = document.getElementById('cleanupModalBody');
+        const expiredCsv = p.expired_csv || [];
+        const emptyCols = p.empty_collections || [];
+        const oldHistory = p.old_history || { count: 0 };
+        const imgCacheCount = p.image_cache_count || 0;
+
+        const csvSizeKb = expiredCsv.reduce((s, f) => s + (f.size_kb || 0), 0);
+        const csvCount = expiredCsv.length;
+        const emptyCount = emptyCols.length;
+        const historyCount = oldHistory.count || 0;
+
+        body.innerHTML = `
+            <div class="cleanup-item">
+                <input type="checkbox" id="cleanupCsv" checked>
+                <div class="cleanup-item-content">
+                    <div class="cleanup-item-title">过期 CSV 文件（&gt;30天）</div>
+                    <div class="cleanup-item-desc">${csvCount} 个文件，共 ${csvSizeKb.toFixed(1)} KB</div>
+                </div>
+            </div>
+            <div class="cleanup-item">
+                <input type="checkbox" id="cleanupEmpty" checked>
+                <div class="cleanup-item-content">
+                    <div class="cleanup-item-title">空凑套系列</div>
+                    <div class="cleanup-item-desc">${emptyCount} 个空系列</div>
+                </div>
+            </div>
+            <div class="cleanup-item">
+                <input type="checkbox" id="cleanupHistory" checked>
+                <div class="cleanup-item-content">
+                    <div class="cleanup-item-title">旧历史记录（&gt;30天）</div>
+                    <div class="cleanup-item-desc">${historyCount} 条记录${oldHistory.oldest_date ? `（${escapeHtml(oldHistory.oldest_date)} ~ ${escapeHtml(oldHistory.newest_date || '')}）` : ''}</div>
+                </div>
+            </div>
+            <div class="cleanup-item">
+                <input type="checkbox" id="cleanupCache">
+                <div class="cleanup-item-content">
+                    <div class="cleanup-item-title">图片缓存</div>
+                    <div class="cleanup-item-desc">${imgCacheCount} 条缓存（默认不勾选）</div>
+                </div>
+            </div>
+            <div class="cleanup-footer">
+                <button class="toolbar-btn-ghost" onclick="closeCleanupModal()">取消</button>
+                <button class="toolbar-btn-primary" id="executeCleanupBtn" onclick="executeCleanup()">执行清理</button>
+            </div>
+        `;
+    }
+
+    async function executeCleanup() {
+        const payload = {
+            clean_csv: document.getElementById('cleanupCsv').checked,
+            clean_empty_collections: document.getElementById('cleanupEmpty').checked,
+            clean_old_history: document.getElementById('cleanupHistory').checked,
+            clean_image_cache: document.getElementById('cleanupCache').checked,
+            history_keep_days: 30
+        };
+        const btn = document.getElementById('executeCleanupBtn');
+        const originalText = btn.innerText;
+        btn.innerText = '清理中...';
+        btn.disabled = true;
+        try {
+            const resp = await fetch('/api/system/cleanup/execute', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            if (!resp.ok) throw new Error('服务器响应错误');
+            const data = await resp.json();
+            if (data.success) {
+                const parts = [];
+                if (data.deleted_csv_count) parts.push(`CSV ${data.deleted_csv_count} 个`);
+                if (data.deleted_collections_count) parts.push(`空系列 ${data.deleted_collections_count} 个`);
+                if (data.deleted_history_count) parts.push(`历史 ${data.deleted_history_count} 条`);
+                if (data.cleared_cache_count) parts.push(`缓存 ${data.cleared_cache_count} 条`);
+                const msg = parts.length ? `✨ 清理完成：${parts.join('、')}` : '✨ 清理完成';
+                showToast(msg, 'success');
+                closeCleanupModal();
+                // 刷新凑套数据
+                if (typeof loadCollections === 'function') loadCollections();
+            } else {
+                showToast('清理失败: ' + (data.error || '未知错误'), 'warning');
+            }
+        } catch(e) {
+            showToast('清理失败: ' + e.message, 'warning');
+        } finally {
+            btn.innerText = originalText;
+            btn.disabled = false;
+        }
+    }
+
+    // 页面加载时加载用户偏好
+    loadPreferences();
+</script>
+
+</body>
+</html>

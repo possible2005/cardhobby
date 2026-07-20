@@ -1,0 +1,184 @@
+[
+  {
+    "id": 1783563804761,
+    "series_name": "topps 狂热",
+    "cards": [
+      {
+        "code": "",
+        "player_cn": "[ ] FAN-2 扬尼斯·阿德托昆博",
+        "player_en": "Giannis Antetokounmpo",
+        "team": "密尔沃基雄鹿",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "[ ] FAN-13 保罗·班切罗",
+        "player_en": "Paolo Banchero",
+        "team": "奥兰多魔术",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "[ ] FAN-14 斯蒂芬·库里",
+        "player_en": "Stephen Curry",
+        "team": "金州勇士",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "[ ] FAN-16 沙奎尔·奥尼尔",
+        "player_en": "Shaquille O'Neal",
+        "team": "洛杉矶湖人",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "[ ] FAN-21 库珀·弗拉格",
+        "player_en": "Cooper Flagg",
+        "team": "达拉斯独行侠",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "[ ] FAN-24 康·克努佩尔",
+        "player_en": "Kon Knueppel",
+        "team": "夏洛特黄蜂",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "[ ] FAN-25 埃斯·贝利",
+        "player_en": "Ace Bailey",
+        "team": "犹他爵士",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "[x] FAN-1 维克托·文班亚马",
+        "player_en": "Victor Wembanyama",
+        "team": "圣安东尼奥马刺",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "[x] FAN-23 VJ·埃奇库姆",
+        "player_en": "VJ Edgecombe",
+        "team": "费城76人",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "[x] FAN-22 迪伦·哈珀",
+        "player_en": "Dylan Harper",
+        "team": "圣安东尼奥马刺",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "[x] FAN-7 凯德·坎宁安",
+        "player_en": "Cade Cunningham",
+        "team": "底特律活塞",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "[x] FAN-12 特雷·杨",
+        "player_en": "Trae Young",
+        "team": "亚特兰大老鹰",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "[x] FAN-18 雷·阿伦",
+        "player_en": "Ray Allen",
+        "team": "西雅图超音速",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "[x] FAN-15 吉米·巴特勒三世",
+        "player_en": "Jimmy Butler III",
+        "team": "金州勇士",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "[x] FAN-19 大卫·罗宾逊",
+        "player_en": "David Robinson",
+        "team": "圣安东尼奥马刺",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "[x] FAN-3 布兰登·米勒",
+        "player_en": "Brandon Miller",
+        "team": "夏洛特黄蜂",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "[x] FAN-9 斯科特·亨德森",
+        "player_en": "Scoot Henderson",
+        "team": "波特兰开拓者",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "[x] FAN-10 泰勒·希罗",
+        "player_en": "Tyler Herro",
+        "team": "迈阿密热火",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "[x] FAN-5 拉梅洛·鲍尔",
+        "player_en": "LaMelo Ball",
+        "team": "夏洛特黄蜂",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "[x] FAN-20 阿伦·艾弗森",
+        "player_en": "Allen Iverson",
+        "team": "费城76人",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "[x] FAN-11 贾马尔·穆雷",
+        "player_en": "Jamal Murray",
+        "team": "丹佛掘金",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "[x] FAN-17 拉里·伯德",
+        "player_en": "Larry Bird",
+        "team": "波士顿凯尔特人",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "[x] FAN-6 杰伦·布朗",
+        "player_en": "Jaylen Brown",
+        "team": "波士顿凯尔特人",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "[x] FAN-4 贾·莫兰特",
+        "player_en": "Ja Morant",
+        "team": "孟菲斯灰熊",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "[x] FAN-8 凯里·欧文",
+        "player_en": "Kyrie Irving",
+        "team": "达拉斯独行侠",
+        "collected": true
+      }
+    ],
+    "created_at": "2026-07-09 10:23:24"
+  }
+]

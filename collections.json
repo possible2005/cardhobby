@@ -1,0 +1,2361 @@
+[
+  {
+    "id": 1783563804761,
+    "series_name": "topps 狂热",
+    "cards": [
+      {
+        "code": "FAN-2",
+        "player_cn": "扬尼斯·阿德托昆博",
+        "player_en": "Giannis Antetokounmpo",
+        "team": "密尔沃基雄鹿",
+        "collected": false
+      },
+      {
+        "code": "FAN-13",
+        "player_cn": "保罗·班切罗",
+        "player_en": "Paolo Banchero",
+        "team": "奥兰多魔术",
+        "collected": false
+      },
+      {
+        "code": "FAN-14",
+        "player_cn": "斯蒂芬·库里",
+        "player_en": "Stephen Curry",
+        "team": "金州勇士",
+        "collected": false
+      },
+      {
+        "code": "FAN-16",
+        "player_cn": "沙奎尔·奥尼尔",
+        "player_en": "Shaquille O'Neal",
+        "team": "洛杉矶湖人",
+        "collected": false
+      },
+      {
+        "code": "FAN-21",
+        "player_cn": "库珀·弗拉格",
+        "player_en": "Cooper Flagg",
+        "team": "达拉斯独行侠",
+        "collected": false
+      },
+      {
+        "code": "FAN-24",
+        "player_cn": "康·克努佩尔",
+        "player_en": "Kon Knueppel",
+        "team": "夏洛特黄蜂",
+        "collected": false
+      },
+      {
+        "code": "FAN-25",
+        "player_cn": "埃斯·贝利",
+        "player_en": "Ace Bailey",
+        "team": "犹他爵士",
+        "collected": false
+      },
+      {
+        "code": "FAN-1",
+        "player_cn": "维克托·文班亚马",
+        "player_en": "Victor Wembanyama",
+        "team": "圣安东尼奥马刺",
+        "collected": true
+      },
+      {
+        "code": "FAN-23",
+        "player_cn": "VJ·埃奇库姆",
+        "player_en": "VJ Edgecombe",
+        "team": "费城76人",
+        "collected": true
+      },
+      {
+        "code": "FAN-22",
+        "player_cn": "迪伦·哈珀",
+        "player_en": "Dylan Harper",
+        "team": "圣安东尼奥马刺",
+        "collected": true
+      },
+      {
+        "code": "FAN-7",
+        "player_cn": "凯德·坎宁安",
+        "player_en": "Cade Cunningham",
+        "team": "底特律活塞",
+        "collected": true
+      },
+      {
+        "code": "FAN-12",
+        "player_cn": "特雷·杨",
+        "player_en": "Trae Young",
+        "team": "亚特兰大老鹰",
+        "collected": true
+      },
+      {
+        "code": "FAN-18",
+        "player_cn": "雷·阿伦",
+        "player_en": "Ray Allen",
+        "team": "西雅图超音速",
+        "collected": true
+      },
+      {
+        "code": "FAN-15",
+        "player_cn": "吉米·巴特勒三世",
+        "player_en": "Jimmy Butler III",
+        "team": "金州勇士",
+        "collected": true
+      },
+      {
+        "code": "FAN-19",
+        "player_cn": "大卫·罗宾逊",
+        "player_en": "David Robinson",
+        "team": "圣安东尼奥马刺",
+        "collected": true
+      },
+      {
+        "code": "FAN-3",
+        "player_cn": "布兰登·米勒",
+        "player_en": "Brandon Miller",
+        "team": "夏洛特黄蜂",
+        "collected": true
+      },
+      {
+        "code": "FAN-9",
+        "player_cn": "斯科特·亨德森",
+        "player_en": "Scoot Henderson",
+        "team": "波特兰开拓者",
+        "collected": true
+      },
+      {
+        "code": "FAN-10",
+        "player_cn": "泰勒·希罗",
+        "player_en": "Tyler Herro",
+        "team": "迈阿密热火",
+        "collected": true
+      },
+      {
+        "code": "FAN-5",
+        "player_cn": "拉梅洛·鲍尔",
+        "player_en": "LaMelo Ball",
+        "team": "夏洛特黄蜂",
+        "collected": true
+      },
+      {
+        "code": "FAN-20",
+        "player_cn": "阿伦·艾弗森",
+        "player_en": "Allen Iverson",
+        "team": "费城76人",
+        "collected": true
+      },
+      {
+        "code": "FAN-11",
+        "player_cn": "贾马尔·穆雷",
+        "player_en": "Jamal Murray",
+        "team": "丹佛掘金",
+        "collected": true
+      },
+      {
+        "code": "FAN-17",
+        "player_cn": "拉里·伯德",
+        "player_en": "Larry Bird",
+        "team": "波士顿凯尔特人",
+        "collected": true
+      },
+      {
+        "code": "FAN-6",
+        "player_cn": "杰伦·布朗",
+        "player_en": "Jaylen Brown",
+        "team": "波士顿凯尔特人",
+        "collected": true
+      },
+      {
+        "code": "FAN-4",
+        "player_cn": "贾·莫兰特",
+        "player_en": "Ja Morant",
+        "team": "孟菲斯灰熊",
+        "collected": true
+      },
+      {
+        "code": "FAN-8",
+        "player_cn": "凯里·欧文",
+        "player_en": "Kyrie Irving",
+        "team": "达拉斯独行侠",
+        "collected": true
+      }
+    ],
+    "created_at": "2026-07-09 10:23:24"
+  },
+  {
+    "id": 1783564477710,
+    "series_name": "剪影",
+    "cards": [
+      {
+        "code": "",
+        "player_cn": "Bronze 铜平行- /49",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "Pink 粉平行- /35",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "Cracked Ice 碎冰平行- /25",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "FOTL Red 先行红平行- /17",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "Scope",
+        "player_en": "",
+        "team": "/15",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "Holo Gold 边闪金- /10",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "FOTL Black 先行黑平行- /7",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "Green 绿平行- /5",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "Holo Platinum 边闪湖水蓝- 1/1",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "Purple 紫平行- /125",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "FOTL Platinum 先行铂金- /3",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "Red 红平行- /75",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "Blue 蓝平行- /99",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "Holo Silver 边闪银- /149",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      }
+    ],
+    "created_at": "2026-07-09 10:34:37"
+  },
+  {
+    "id": 1783564606779,
+    "series_name": "Masic montage",
+    "cards": [
+      {
+        "code": "",
+        "player_cn": "安东尼·爱德华兹",
+        "player_en": "",
+        "team": "明尼苏达森林狼",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "达米安·利拉德",
+        "player_en": "",
+        "team": "密尔沃基雄鹿",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "谢伊·吉尔杰斯-亚历山大",
+        "player_en": "",
+        "team": "俄克拉荷马城雷霆",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "斯蒂芬·库里",
+        "player_en": "",
+        "team": "金州勇士",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "斯蒂芬·卡斯尔",
+        "player_en": "",
+        "team": "圣安东尼奥马刺",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "维克托·文班亚马",
+        "player_en": "",
+        "team": "圣安东尼奥马刺",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "扎卡里·里萨谢",
+        "player_en": "",
+        "team": "亚特兰大老鹰",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "蔡恩·威廉森",
+        "player_en": "",
+        "team": "新奥尔良鹈鹕",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "贾里德·麦凯恩",
+        "player_en": "",
+        "team": "费城76人",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "卢卡·东契奇",
+        "player_en": "",
+        "team": "达拉斯独行侠",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "尼古拉·约基奇",
+        "player_en": "",
+        "team": "丹佛掘金",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "罗恩·霍兰德二世",
+        "player_en": "",
+        "team": "底特律活塞",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "保罗·班切罗",
+        "player_en": "",
+        "team": "奥兰多魔术",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "吉米·巴特勒",
+        "player_en": "",
+        "team": "金州勇士",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "道尔顿·克内克特",
+        "player_en": "",
+        "team": "洛杉矶湖人",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "里德·谢泼德",
+        "player_en": "",
+        "team": "休斯顿火箭",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "凯文·杜兰特",
+        "player_en": "",
+        "team": "菲尼克斯太阳",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "亚历克斯·萨尔",
+        "player_en": "",
+        "team": "华盛顿奇才",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "蒂贾内·萨隆",
+        "player_en": "",
+        "team": "夏洛特黄蜂",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "多诺万·米切尔",
+        "player_en": "",
+        "team": "克利夫兰骑士",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "多诺万·克林根",
+        "player_en": "",
+        "team": "波特兰开拓者",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "贾·莫兰特",
+        "player_en": "",
+        "team": "孟菲斯灰熊",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "扬尼斯·阿德托昆博",
+        "player_en": "",
+        "team": "密尔沃基雄鹿",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "拉梅洛·鲍尔",
+        "player_en": "",
+        "team": "夏洛特黄蜂",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "泰瑞斯·哈利伯顿",
+        "player_en": "",
+        "team": "印第安纳步行者",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "拉梅洛·鲍尔",
+        "player_en": "",
+        "team": "夏洛特黄蜂",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "特雷·杨",
+        "player_en": "",
+        "team": "亚特兰大老鹰",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "杰伦·威尔斯",
+        "player_en": "",
+        "team": "孟菲斯灰熊",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "杰伦·布伦森",
+        "player_en": "",
+        "team": "纽约尼克斯",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "杰森·塔图姆",
+        "player_en": "",
+        "team": "波士顿凯尔特人",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "勒布朗·詹姆斯",
+        "player_en": "",
+        "team": "洛杉矶湖人",
+        "collected": true
+      }
+    ],
+    "created_at": "2026-07-09 10:36:46"
+  },
+  {
+    "id": 1783564640168,
+    "series_name": "Masic bank shot",
+    "cards": [
+      {
+        "code": "",
+        "player_cn": "道尔顿·克内克特",
+        "player_en": "",
+        "team": "洛杉矶湖人队",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "卢卡·东契奇",
+        "player_en": "",
+        "team": "洛杉矶湖人队",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "谢伊·吉尔杰斯-亚历山大",
+        "player_en": "",
+        "team": "俄克拉荷马城雷霆队",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "达米安·利拉德",
+        "player_en": "",
+        "team": "密尔沃基雄鹿队",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "杰森·塔图姆",
+        "player_en": "",
+        "team": "波士顿凯尔特人队",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "凯文·杜兰特",
+        "player_en": "",
+        "team": "菲尼克斯太阳队",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "勒布朗·詹姆斯",
+        "player_en": "",
+        "team": "洛杉矶湖人队",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "维克托·文班亚马",
+        "player_en": "",
+        "team": "圣安东尼奥马刺队",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "凯里·欧文",
+        "player_en": "",
+        "team": "达拉斯独行侠队",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "特雷·杨",
+        "player_en": "",
+        "team": "亚特兰大老鹰队",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "多诺万·米切尔",
+        "player_en": "",
+        "team": "克利夫兰骑士队",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "安东尼·爱德华兹",
+        "player_en": "",
+        "team": "明尼苏达森林狼队",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "里德·谢泼德",
+        "player_en": "",
+        "team": "休斯顿火箭队",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "贾里德·麦凯恩",
+        "player_en": "",
+        "team": "费城76人队",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "贾·莫兰特",
+        "player_en": "",
+        "team": "孟菲斯灰熊队",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "布布·卡林顿",
+        "player_en": "",
+        "team": "华盛顿奇才队",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "保罗·班切罗",
+        "player_en": "",
+        "team": "奥兰多魔术队",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "扎卡里·里萨谢",
+        "player_en": "",
+        "team": "亚特兰大老鹰队",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "斯蒂芬·卡斯尔",
+        "player_en": "",
+        "team": "圣安东尼奥马刺队",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "斯蒂芬·库里",
+        "player_en": "",
+        "team": "金州勇士队",
+        "collected": true
+      }
+    ],
+    "created_at": "2026-07-09 10:37:20"
+  },
+  {
+    "id": 1783564732096,
+    "series_name": "24-25 凯里 欧文 select 2级",
+    "cards": [
+      {
+        "code": "",
+        "player_cn": "浅蓝泡泡折 /99 Light Blue Disco Prizms",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "青白粉三色折 /49 Teal White Pink Prizms",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "蓝泡泡折 /25 Blue Disco Prizms",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "金折 /10 Gold Prizms",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "信封折 /8 Lucky Envelopes Prizms",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "绿泡泡折 /5 Green Disco Prizms",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "绿折 /5 Green Prizms",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "霓虹紫脉冲折 FOTL /5 Neon Purple Pulsar Prizms FOTL",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "粉折 /4 Pink Prizms Marketing",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "黑泡泡折 /1 Black Disco Prizms",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "黑折 /1 Black Finite Prizms",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "黑蛇皮折 FOTL /1 Black Snake Skin Pulsar Prizms FOTL",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "基础（无折射）Base",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "银折 Silver Prizms",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "基础蓝（无折射）Blue",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "蓝折 Blue Prizms",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "泡泡折 Disco Prizms",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "圈圈折 Scope Prizms",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "宇宙普折（专属包） Cosmic Prizms",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "金闪粉折（SP） Gold Glitter Prizms",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "白闪折（专属包）White Sparkle Prizms",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "龙鳞折 /8 Dragon Scale Prizms",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "斑马折（SP）Zebra Prizms",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "金泡泡折 /10 Gold Disco Prizms",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "红波纹折 Red Wave Prizms",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "金波纹折 /10 Gold Wave Prizms",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "红泡泡折 /49 Red Disco Prizms",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "白波纹折 /99 White Wave Prizms",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "绿波纹折 /50 Green Wave Prizms",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "三色波纹折 /20 Multi Wave Prizms",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "蓝波纹折 /75 Blue Wave Prizms",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "蓝碎冰",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "蓝瀑布99",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "白迪斯科普折 /75 White Disco Prizms",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "紫折 /99 Purple Prizms",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "霓虹橙脉冲折 FOTL /18 Neon Orange Pulsar Prizms FOTL",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "橙折 /65 Orange Prizms",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "白圈圈折 /35 White Scope Prizms",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "酒红折 /175 Maroon Prizms",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "绿迷彩 /125 Green Camo Prizms",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "浅蓝折 /299 Light Blue Prizms",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "三色折 Tri-Color Prizms",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "红迷宫折 /249 Red Scope Prizms",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "霓虹绿折 /75 Neon Green Prizms",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "白折 /149 White Prizms",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "青铜格子折 /49 Bronze Checker Prizms",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "扎染折 /25 Tie-Dye Prizms",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "红折 /199 Red Prizms",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      }
+    ],
+    "created_at": "2026-07-09 10:38:52"
+  },
+  {
+    "id": 1783564812962,
+    "series_name": "24-25 凯里 欧文 起源",
+    "cards": [
+      {
+        "code": "",
+        "player_cn": "Cosmos 宇宙纹",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "Tessellated 几何拼贴纹",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "Orange – /75 橙",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "Neon Stripes – /49 霓虹条纹",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "Neon Green – /25 霓虹绿",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "Turquoise – /25 绿松石",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "Purple FOTL – /22 先行紫",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "Opal – /15 蛋白石",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "Amethyst – /8 紫水晶",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "Green – /5 绿",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "Swirl FOTL – /3 先行旋涡",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "Black – 1/1 黑色",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "Basketballs 篮球纹",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "Gold – /10 金",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "Maroon – /115 酒红",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "Blue – /99 蓝",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "White – /60 白",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "Black and White – /15 黑白",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "Pink – /60 粉",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "Red – /299 红",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      }
+    ],
+    "created_at": "2026-07-09 10:40:12"
+  },
+  {
+    "id": 1783564849463,
+    "series_name": "24-25 凯里 欧文 油画",
+    "cards": [
+      {
+        "code": "",
+        "player_cn": "base",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "artist proof无",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "canvas画布",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "red and blue无",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "Gold10",
+        "player_cn": "",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "Masterpiece1",
+        "player_cn": "白金",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "Amber75",
+        "player_cn": "琥珀",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      },
+      {
+        "code": "Sapphire25",
+        "player_cn": "蓝宝石",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      },
+      {
+        "code": "Burgundy125",
+        "player_cn": "勃艮第",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      },
+      {
+        "code": "Obsidian8",
+        "player_cn": "黑曜石",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      },
+      {
+        "code": "Violet49",
+        "player_cn": "紫罗兰",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      },
+      {
+        "code": "Pink99",
+        "player_cn": "",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      },
+      {
+        "code": "Jade25",
+        "player_cn": "翡翠",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "ruby 149",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      }
+    ],
+    "created_at": "2026-07-09 10:40:49"
+  },
+  {
+    "id": 1783564940908,
+    "series_name": "23-24 凯里 欧文 球票 Optic",
+    "cards": [
+      {
+        "code": "",
+        "player_cn": "Season Ticket Black Pandora 无编黑潘多拉折",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "Season Ticket Cracked Ice 23编碎冰折",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "Season Ticket Purple FOTL 18编先行紫折",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "Season Ticket Gold 10编金折",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "Season Ticket Black FOTL 3编先行黑折",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "Season Ticket Gold Lazer 2编金镭射折",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "Season Ticket Gold Vinyl 1编爆金折",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "Season Ticket Printing Plate Black/Cyan/Magenta/Yellow",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "Season Ticket International Red Pandora 1编红潘多拉折",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "Season Ticket Orange 49编橙折",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "Season Ticket Pink 75编粉折",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "Season Ticket Green Pulsar 25编绿脉冲折",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "Season Ticket International Gold 10编国际金折",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "Season Ticket Blue 99编蓝折",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "Season Ticket International Red 无编国际红折",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "Season Ticket International Jade Cracked Ice 5编绿碎冰折",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "Season Ticket Purple 15编紫折",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "Season Ticket International Blue 45编国际蓝折",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "Season Ticket International Black and White 25编国际黑白折",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "Season Ticket Red 无编红折",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "Season Ticket Silver 无编银折",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "Season Ticket 无编",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      }
+    ],
+    "created_at": "2026-07-09 10:42:20"
+  },
+  {
+    "id": 1783565036929,
+    "series_name": "24-25 凯里 欧文 革命",
+    "cards": [
+      {
+        "code": "",
+        "player_cn": "蓝色风暴（Blue Storm）",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "红色漩涡（Red Swirl）",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "红星际（Red Astro） – 限量299编",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "蓝宇宙（Blue Cosmo） – 限量285编",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "绿风暴（Green Storm） – 限量149编",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "红视界（Red Scope） – 限量135编",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "蓝星际（Blue Astro） – 限量99编",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "中国新年翡翠（Chinese New Year Emerald） – 限量88编",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "绿宇宙（Green Cosmo） – 限量75编",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "立方（Cubic） – 限量50编",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "蓝绿漩涡（Teal Swirl） – 限量49编",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "蓝绿视界（Teal Scope） – 限量35编",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "无限（Infinite） – 限量25编",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "粉红风暴（Pink Storm） – 限量20编",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "紫星际（Purple Astro） – 限量15编",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "熔岩（Lava） – 限量10编",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "中国新年全息金（Chinese New Year Holo Gold） – 限量8编",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "紫漩涡（Purple Swirl） – 限量5编",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "万花筒（Kaleido） – 唯一1/1",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "层级（Levels） – 限量25编",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "分形（Fractal）",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "银河（Galactic）*SSP",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "日耀（Sunburst） – 限量75编",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "星际（Astro）",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "绿星际（Green Astro） – 限量125编",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "中子（Neutron） – 限量125编",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "律动（Groove）",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "烟花（Fireworks） – 限量149编",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "中国新年（Chinese New Year）",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "宇宙（Cosmic） – 限量99编",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "闪电（Lightning） – 限量175编",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "未来框架（Future Frame） – 限量60编",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      }
+    ],
+    "created_at": "2026-07-09 10:43:56"
+  },
+  {
+    "id": 1783565090932,
+    "series_name": "24-25 凯里 欧文 one and one",
+    "cards": [
+      {
+        "code": "",
+        "player_cn": "Base/Rookies/Legends Red",
+        "player_en": "",
+        "team": "15红",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "Base/Rookies/Legends Gold",
+        "player_en": "",
+        "team": "10金",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "Base/Rookies/Legends Green",
+        "player_en": "",
+        "team": "5绿",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "Base/Rookies/Legends Black",
+        "player_en": "",
+        "team": "1黑",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "Base/Rookies/Legends FOTL White",
+        "player_en": "",
+        "team": "7先行白",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "Base/Rookies/Legends Purple",
+        "player_en": "",
+        "team": "25紫",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "Base/Rookies/Legends Blue",
+        "player_en": "",
+        "team": "35蓝",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "Base/Rookies/Legends Orange",
+        "player_en": "",
+        "team": "49橙",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "Base/Rookies/Legends",
+        "player_en": "",
+        "team": "75银",
+        "collected": true
+      }
+    ],
+    "created_at": "2026-07-09 10:44:50"
+  },
+  {
+    "id": 1783565157241,
+    "series_name": "24-25 凯里 欧文 马赛克",
+    "cards": [
+      {
+        "code": "",
+        "player_cn": "Base 基础",
+        "player_en": "都有",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "Base Mosaic 马赛克折（都有）",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "Base Silver 银折（都有）",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "Base Mosaic Glitter 银闪折（HB小比例）",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "Base Mosaic Red 红折（HB）",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "Base Mosaic Purple Snakeskin /24紫蛇皮折（全新HB）",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "Base Mosaic Tessellation /15几何折（全新HB）",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "Base Mosaic Gold Snakeskin /8金蛇皮折（HB）",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "Base Mosaic Gold Glitter /5金闪折（HB）",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "Base Mosaic Black /1黑折（HB）",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "Base Mosaic Spectris Green FOTL /5先行光谱绿折（先行）",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "Base Mosaic Spectris Gold Vinyl FOTL /1先行光谱爆金折（先行）",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "Base Mosaic Choice Peacock 孔雀折（猝死）",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "Base Mosaic Choice Fusion Red and Yellow /75猝死红黄折（猝死）",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "Base Mosaic Choice Blue /45猝死蓝折（猝死）",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "Base Mosaic Choice Cherry Blossom /20猝死樱花折（猝死）",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "Base Mosaic Choice Black Gold /8猝死黑金折（猝死）",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "Base Mosaic Choice Nebula /1星云折（猝死）",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "Base Mosaic Fast Break Silver 泡泡折（快攻）",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "Base Mosaic Fast Break Red /99红泡泡折（快攻）",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "Base Mosaic Fast Break Blue /85蓝泡泡折（快攻）",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "Base Mosaic Fast Break Purple /50紫泡泡折（快攻）",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "Base Mosaic Fast Break Pink /20粉泡泡折（快攻）",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "Base Mosaic Fast Break Gold /10金泡泡折（快攻）",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "Base Mosaic Fast Break Black /1黑泡泡折（快攻）",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "Base Mosaic International Green /15国际绿折（国际）",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "Base Mosaic International Black /1国际黑折（国际）",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "Base Lucky Envelopes /8信封折（信封）",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "Base Mosaic Green 绿折（零售）",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "Base Mosaic Green Ice 绿碎冰折（零售）",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "Base Mosaic Reactive Blue 蓝爆炸折（零售）",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "Base Mosaic Reactive Yellow 黄爆炸折（零售）",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "Base Mosaic Red Seismic /299红地震折（零售）",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "Base Mosaic Purple Fluorescent /249紫荧光折（零售）",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "Base Mosaic Blue Seismic /149蓝地震折（零售）",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "Base Mosaic Ice /125碎冰折（零售）",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "Base Mosaic Blue Fluorescent /75蓝荧光折（零售）",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "Base Mosaic Red Fluorescent /75红荧光折（零售）",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "Base Mosaic Orange Ice /49橙碎冰折（零售）",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "Base Mosaic Orange Fluorescent /25橙荧光折（零售）",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "Base Mosaic Green Fluorescent /10绿荧光折（零售）",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "Base Mosaic Pink Fluorescent /10粉荧光折（零售）",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "Base Premium 套装折（应该套装独占）",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "Base White Sparkle 白碎点折 （独占包发售）",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "Base Mosaic Gold /10金折（HB）",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "Base Mosaic International 国际折（国际）",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "Base Mosaic International Gold /10国际金折（国际）",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "Base Mosaic Fast Break Gold Black /3黑金泡泡折（快攻）",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "Base Mosaic Orange /249橙折（HB）",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "Base Mosaic Purple /99紫折（HB）",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "Base Mosaic White /25白折（HB）",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "Base Mosaic Blue /199蓝折（HB）",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "Base Mosaic Pink /175粉折（HB）",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "Base Mosaic Choice White /35猝死白折（猝死）",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "Base Mosaic Spectris Gold FOTL /10先行光谱金折（先行）",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "Base Mosaic Fast Break Blue Camo /35蓝迷彩泡泡折（快攻）",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "Base Mosaic Year of the Snake 蛇年折/8（应该是国际）",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "Base Mosaic Genesis 起源折（零售）",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "Base Mosaic Fast Break Neon Green /5霓虹绿泡泡折（快攻）",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "Base Mosaic Spectris Blue FOTL /25先行光谱蓝折（先行）",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "Base Mosaic Bronze /75铜折（全新HB）",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "Base Mosaic International Blue /35国际蓝折（国际）",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "Base Mosaic International White /25国际白折（国际）",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "Base Mosaic Honeycomb 蜂巢折（全新HB小比例）",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "Base Mosaic International Red /75国际红折（国际）",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      }
+    ],
+    "created_at": "2026-07-09 10:45:57"
+  },
+  {
+    "id": 1783651968114,
+    "series_name": "24-25 起源 风暴",
+    "cards": [
+      {
+        "code": "",
+        "player_cn": "扬尼斯·阿德托昆博",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "斯蒂芬·卡斯尔",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "蔡恩·威廉森",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "杰森·塔图姆",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "安东尼·爱德华兹",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "亚历山大·萨尔",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "斯蒂芬·库里",
+        "player_en": "",
+        "team": "",
+        "collected": false
+      },
+      {
+        "code": "",
+        "player_cn": "勒布朗·詹姆斯",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "德文·布克",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "里德·谢泼德",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "保罗·班切罗",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "维克托·文班亚马",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "尼古拉·约基奇",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "达米安·利拉德",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "谢伊·吉尔杰斯-亚历山大",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "特雷·杨",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "布朗尼·詹姆斯",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "卢卡·东契奇",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "贾·莫兰特",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "多诺万·克林根",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "泰瑞斯·哈利伯顿",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "凯文·杜兰特",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "道尔顿·克内克特",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "扎卡里·里萨谢",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      },
+      {
+        "code": "",
+        "player_cn": "凯里·欧文",
+        "player_en": "",
+        "team": "",
+        "collected": true
+      }
+    ],
+    "created_at": "2026-07-10 10:52:48"
+  }
+]

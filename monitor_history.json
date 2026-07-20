@@ -1,0 +1,114 @@
+[
+  {
+    "timestamp": 1783648843,
+    "time_str": "2026-07-10 10:00:43",
+    "keyword": "24-25 凯里 欧文",
+    "total_items": 73,
+    "status": "success",
+    "error": null
+  },
+  {
+    "timestamp": 1783648850,
+    "time_str": "2026-07-10 10:00:50",
+    "keyword": "24-25 凯里 欧文",
+    "total_items": 73,
+    "status": "success",
+    "error": null
+  },
+  {
+    "timestamp": 1783648843,
+    "time_str": "2026-07-10 10:00:43",
+    "keyword": "25-26 凯里 欧文",
+    "total_items": 64,
+    "status": "success",
+    "error": null
+  },
+  {
+    "timestamp": 1783648850,
+    "time_str": "2026-07-10 10:00:50",
+    "keyword": "25-26 凯里 欧文",
+    "total_items": 64,
+    "status": "success",
+    "error": null
+  },
+  {
+    "timestamp": 1783648843,
+    "time_str": "2026-07-10 10:00:43",
+    "keyword": "24-25 马赛克 蒙太奇",
+    "total_items": 14,
+    "status": "success",
+    "error": null
+  },
+  {
+    "timestamp": 1783648843,
+    "time_str": "2026-07-10 10:00:43",
+    "keyword": "24-25 马赛克 bank",
+    "total_items": 6,
+    "status": "success",
+    "error": null
+  },
+  {
+    "timestamp": 1783648850,
+    "time_str": "2026-07-10 10:00:50",
+    "keyword": "24-25 马赛克 蒙太奇",
+    "total_items": 14,
+    "status": "success",
+    "error": null
+  },
+  {
+    "timestamp": 1783648850,
+    "time_str": "2026-07-10 10:00:50",
+    "keyword": "24-25 马赛克 bank",
+    "total_items": 6,
+    "status": "success",
+    "error": null
+  },
+  {
+    "timestamp": 1783648843,
+    "time_str": "2026-07-10 10:00:43",
+    "keyword": "25-26 topps 狂热",
+    "total_items": 25,
+    "status": "success",
+    "error": null
+  },
+  {
+    "timestamp": 1783648850,
+    "time_str": "2026-07-10 10:00:50",
+    "keyword": "25-26 topps 狂热",
+    "total_items": 25,
+    "status": "success",
+    "error": null
+  },
+  {
+    "timestamp": 1783648843,
+    "time_str": "2026-07-10 10:00:43",
+    "keyword": "赵继伟",
+    "total_items": 19,
+    "status": "success",
+    "error": null
+  },
+  {
+    "timestamp": 1783648850,
+    "time_str": "2026-07-10 10:00:50",
+    "keyword": "赵继伟",
+    "total_items": 19,
+    "status": "success",
+    "error": null
+  },
+  {
+    "timestamp": 1783648843,
+    "time_str": "2026-07-10 10:00:43",
+    "keyword": "张镇麟",
+    "total_items": 10,
+    "status": "success",
+    "error": null
+  },
+  {
+    "timestamp": 1783648850,
+    "time_str": "2026-07-10 10:00:50",
+    "keyword": "张镇麟",
+    "total_items": 10,
+    "status": "success",
+    "error": null
+  }
+]
