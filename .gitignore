@@ -1,15 +1,43 @@
-# 忽略 Python 缓存文件
+# Python 缓存文件
 __pycache__/
 *.pyc
+*.pyo
 
-# 忽略 Python 虚拟环境 (如果你用了虚拟环境)
+# Python 虚拟环境
 venv/
 .venv/
 env/
 lib/
+bin/
+include/
+pyvenv.cfg
 
-# 忽略本地环境变量配置 (比如存放密码的 .env 文件)
+# 本地环境变量配置
 .env
 
-# 忽略 Mac 系统生成的隐藏文件
+# Mac 系统生成的隐藏文件
 .DS_Store
+
+# 本地调试脚本和数据（不应上传到 GitHub）
+analyze_img.py
+debug_scrape.py
+debug_scrape2.py
+debug_page.html
+test_api.py
+
+# 本地数据文件
+data/
+*.csv
+*.json
+!app/models/*.py
+
+# 本地临时文件
+*.png
+collections.json
+collections.json.bak
+monitor_config.json
+monitor_history.json
+
+# IDE 配置
+.vscode/
+.idea/
