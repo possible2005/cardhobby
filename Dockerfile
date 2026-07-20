@@ -17,4 +17,4 @@ EXPOSE 8000
 # 启动命令（需根据你的实际入口文件修改）
 # Flask 示例: CMD ["python", "app.py"]
 # FastAPI 示例: CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
-CMD ["python", "app.py"]
+CMD ["python", "run.py"]
